@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <header>
+        <h1>Board</h1>
+    </header>
+    <div th:if="${session.user}">
+        <p th:text="${'Welcome! ' + session.user.username}">Username</p>
+        <a href="/signOut">Sign Out</a>
+        <a href="/write">Write Post</a>
+    </div>
+    <div th:unless="${session.user}">
+        <a href="/signIn">Sign In</a>
+        <a href="/signUp">Sign Up</a>
+    </div>
+    <div>
+
+    </div>
+</body>
+</html>
