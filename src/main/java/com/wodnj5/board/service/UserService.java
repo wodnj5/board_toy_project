@@ -14,21 +14,28 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Long signUp(String username, String password, String email) {
+    public Long join(String email, String password, String username) {
+        validateDuplicateEmail(email);
         validateDuplicateUsername(username);
-        User newbie = new User(username, password, email);
+        User newbie = new User(email, password, username);
         userRepository.save(newbie);
         return newbie.getId();
     }
 
-    private void validateDuplicateUsername(String username) {
-        if(userRepository.findByUsername(username).isPresent()) {
-            throw new IllegalStateException("USERNAME IS ALREADY USED");
+    private void validateDuplicateEmail(String email) {
+        if(userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalStateException("THIS EMAIL IS ALREADY USED");
         }
     }
 
-    public User signIn(String username, String password) {
-        Optional<User> find = userRepository.findByUsername(username);
+    private void validateDuplicateUsername(String username) {
+        if(userRepository.findByUsername(username).isPresent()) {
+            throw new IllegalStateException("THIS USERNAME IS ALREADY USED");
+        }
+    }
+
+    public User login(String email, String password) {
+        Optional<User> find = userRepository.findByEmail(email);
         if(find.isEmpty()) {
             throw new IllegalStateException("USER IS NOT EXIST");
         }

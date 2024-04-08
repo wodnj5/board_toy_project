@@ -2,23 +2,61 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href="/css/no.css" rel="stylesheet" type="text/css">
     <title>Home</title>
 </head>
 <body>
-    <header>
-        <h1>Board</h1>
-    </header>
-    <div th:if="${session.user}">
-        <p th:text="${'Welcome! ' + session.user.username}">Username</p>
-        <a href="/signOut">Sign Out</a>
-        <a href="/write">Write Post</a>
-    </div>
-    <div th:unless="${session.user}">
-        <a href="/signIn">Sign In</a>
-        <a href="/signUp">Sign Up</a>
-    </div>
-    <div>
-
-    </div>
+<nav class="black">
+    <a>Board</a>
+    <label for="hamburger">&#9776;</label>
+    <ul>
+        <!---
+        <li><a>Home</a></li>
+        <li><a>Test1</a></li>
+        <li><a>Test2</a></li>
+        <li><a>Test3</a></li>
+        <li>
+            <a>Test4</a>
+            <ul>
+                <li><a>Test5</a></li>
+                <li><a>Test6</a></li>
+                <li><a>Test7</a></li>
+                <li><a>Test8</a></li>
+            </ul>
+        </li>
+        ---->
+    </ul>
+    <input id="hamburger" type="checkbox" />
+    <ul th:unless="${session.user}">
+        <li><a href="/user/join">Join</a></li>
+        <li><a href="/user/login">Login</a></li>
+    </ul>
+    <ul th:if="${session.user}">
+        <li><a th:text="${session.user.username}"></a>
+            <ul>
+                <li><a href="/post/write">Write Post</a></li>
+                <li><a href="/user/logout">Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.id}"></td>
+            <td><a th:href="${'/post/read' + '?id=' + post.id}" th:text="${post.title}"></a></td>
+            <td th:text="${post.user.username}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

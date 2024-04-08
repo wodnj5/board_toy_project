@@ -1,8 +1,8 @@
 package com.wodnj5.board.controller;
 
 import com.wodnj5.board.domain.User;
-import com.wodnj5.board.form.SignInForm;
-import com.wodnj5.board.form.SignUpForm;
+import com.wodnj5.board.form.JoinForm;
+import com.wodnj5.board.form.LoginForm;
 import com.wodnj5.board.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -17,34 +17,34 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/signUp")
-    public String signUp() {
-        return "signUp";
+    @GetMapping("/user/join")
+    public String join() {
+        return "join";
     }
 
-    @PostMapping("/signUp")
-    public String signUp(SignUpForm form) {
-        userService.signUp(form.getUsername(), form.getPassword(), form.getEmail());
-        return "redirect:/home";
+    @PostMapping("/user/join")
+    public String join(JoinForm form) {
+        userService.join(form.getEmail(), form.getPassword(), form.getUsername());
+        return "redirect:/";
     }
 
-    @GetMapping("/signIn")
-    public String signIn() {
-        return "signIn";
+    @GetMapping("/user/login")
+    public String login() {
+        return "login";
     }
 
-    @PostMapping("/signIn")
-    public String signIn(SignInForm form, HttpServletRequest request) {
-        User user = userService.signIn(form.getUsername(), form.getPassword());
+    @PostMapping("/user/login")
+    public String login(LoginForm form, HttpServletRequest request) {
+        User user = userService.login(form.getEmail(), form.getPassword());
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
-        return "redirect:/home";
+        return "redirect:/";
     }
 
-    @GetMapping("/signOut")
-    public String signOut(HttpServletRequest request) {
+    @GetMapping("/user/logout")
+    public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.removeAttribute("user");
-        return "redirect:/home";
+        return "redirect:/";
     }
 }

@@ -5,8 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SignInForm {
+public class JoinForm {
 
-    private String username;
+    private String email;
     private String password;
+    private String username;
+
 }

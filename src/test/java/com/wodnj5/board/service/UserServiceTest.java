@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class UserServiceTest {
 
-    final String username = "Nam";
+    final String email = "jw123@naver.com";
+    final String username = "jaewon";
     final String password = "1234";
-    final String email = "nam123@naver.com";
 
     @Autowired
     private UserService userService;
@@ -25,13 +25,14 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Test
-    void checkSignUp() {
+    void join() {
         // 사용자 등록
-        Long id = userService.signUp(username, password, email);
+        Long id = userService.join(email, password, username);
         Optional<User> user = userRepository.findById(id);
         // 사용자가 등록되지 않으면 실패
         if(user.isEmpty()) fail("USER IS NOT EXIST");
-        // 찾은 사용자의 이름과 비밀번호가 일치하는 확인
+        // 찾은 사용자의 정보가 일치하는 확인
+        Assertions.assertEquals(email, user.get().getEmail());
         Assertions.assertEquals(username, user.get().getUsername());
         Assertions.assertEquals(password, user.get().getPassword());
     }
@@ -39,8 +40,8 @@ class UserServiceTest {
     @Test
     void validateWrongPassword() {
         // 사용자 등록
-        userService.signUp(username, password, email);
+        userService.join(username, password, email);
         // 잘못된 비밀번호 입력 시 에러 발생
-        Assertions.assertThrows(IllegalStateException.class, () -> userService.signIn(username, "5678"));
+        Assertions.assertThrows(IllegalStateException.class, () -> userService.login(username, "5678"));
     }
 }
