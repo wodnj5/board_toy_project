@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="/css/no.css" rel="stylesheet" type="text/css">
+    <title>Write Post</title>
+</head>
+<body>
+<div class="c75">
+    <form action="/post/edit" method="post">
+        <input name="id" th:field="${post.id}" type="hidden">
+        <div><label>Title</label></div>
+        <input name="title" placeholder="title" th:disabled="${session.user eq null or session.user.id ne post.user.id}" th:field="${post.title}" type="text">
+        <div><label>Content</label></div>
+        <textarea name="content" placeholder="content" th:disabled="${session.user eq null or session.user.id ne post.user.id}" th:field="${post.content}"></textarea>
+        <button th:unless="${session.user eq null or session.user.id ne post.user.id}" type="submit">Edit</button>
+    </form>
+</div>
+</body>
+</html>

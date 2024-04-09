@@ -35,4 +35,13 @@ public class PostService {
         }
         return find.get();
     }
+
+    public void edit(Long id, String title, String content) {
+        Optional<Post> find = postRepository.findById(id);
+        if(find.isEmpty()) {
+            throw new IllegalStateException("POST IS NOT EXIST");
+        }
+        Post post = find.get();
+        post.edit(title, content);
+    }
 }

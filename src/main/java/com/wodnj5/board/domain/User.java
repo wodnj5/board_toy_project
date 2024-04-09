@@ -41,5 +41,5 @@ public class User {
         password VARCHAR(255) NOT NULL,
         username VARCHAR(255) NOT NULL UNIQUE,
         created_at DATETIME);
-     */
+    */
 }

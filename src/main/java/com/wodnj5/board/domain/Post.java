@@ -47,4 +47,9 @@ public class Post {
         created_at DATETIME,
         FOREIGN KEY(user_id) REFERENCES users(id));
     */
+
+    public void edit(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
