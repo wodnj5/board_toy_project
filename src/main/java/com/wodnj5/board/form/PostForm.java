@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EditForm {
+public class PostForm {
 
-    private Long id;
     private String title;
     private String content;
 

@@ -29,19 +29,22 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Post findOne(Long id) {
-        Optional<Post> find = postRepository.findById(id);
-        if(find.isEmpty()) {
+        Optional<Post> post = postRepository.findById(id);
+        if(post.isEmpty()) {
             throw new IllegalStateException("POST IS NOT EXIST");
         }
-        return find.get();
+        return post.get();
     }
 
     public void edit(Long id, String title, String content) {
-        Optional<Post> find = postRepository.findById(id);
-        if(find.isEmpty()) {
+        Optional<Post> post = postRepository.findById(id);
+        if(post.isEmpty()) {
             throw new IllegalStateException("POST IS NOT EXIST");
         }
-        Post post = find.get();
-        post.edit(title, content);
+        post.get().edit(title, content);
+    }
+
+    public void delete(Long id) {
+        postRepository.deleteById(id);
     }
 }

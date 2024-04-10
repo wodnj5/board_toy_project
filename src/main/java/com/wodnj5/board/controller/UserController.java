@@ -4,7 +4,6 @@ import com.wodnj5.board.domain.User;
 import com.wodnj5.board.form.JoinForm;
 import com.wodnj5.board.form.LoginForm;
 import com.wodnj5.board.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,16 +33,15 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public String login(LoginForm form, HttpServletRequest request) {
+    public String login(LoginForm form, HttpSession session) {
         User user = userService.login(form.getEmail(), form.getPassword());
-        HttpSession session = request.getSession();
         session.setAttribute("user", user);
+        session.setMaxInactiveInterval(30 * 60);
         return "redirect:/";
     }
 
     @GetMapping("/user/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    public String logout(HttpSession session) {
         session.removeAttribute("user");
         return "redirect:/";
     }
