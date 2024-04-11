@@ -2,59 +2,51 @@ package com.wodnj5.board.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "posts")
+@Table(name = "comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @Column(nullable = false)
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
     @Column(nullable = false)
     private String content;
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments = new ArrayList<>();
     private LocalDateTime createdAt;
 
-    public Post(User user, String title, String content) {
+    public Comment(User user, Post post, String content) {
         this.user = user;
-        this.title = title;
+        this.post = post;
         this.content = content;
         this.createdAt = LocalDateTime.now();
+        post.getComments().add(this);
     }
 
     /*
-        CREATE TABLE posts (id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        CREATE TABLE comments (id BIGINT AUTO_INCREMENT PRIMARY KEY,
         user_id BIGINT NOT NULL,
-        title VARCHAR(255) NOT NULL,
-        content VARCHAR(255) NOT NULL,
+        post_id BIGINT NOT NULL,
+        content varchar(1000) NOT NULL,
         created_at DATETIME,
-        FOREIGN KEY(user_id) REFERENCES users(id));
-    */
-
-    public void edit(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
+        FOREIGN KEY(user_id) REFERENCES users(id),
+        FOREIGN KEY(post_id) REFERENCES posts(id));
+     */
 }

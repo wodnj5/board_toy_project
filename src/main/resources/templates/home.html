@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="/css/no.css" rel="stylesheet" type="text/css">
-    <title>Home</title>
+    <title>게시판</title>
 </head>
 <body>
 <nav class="black">
@@ -28,14 +28,14 @@
     </ul>
     <input id="hamburger" type="checkbox" />
     <ul th:unless="${session.user}">
-        <li><a href="/user/join">Join</a></li>
-        <li><a href="/user/login">Login</a></li>
+        <li><a href="/user/join">회원가입</a></li>
+        <li><a href="/user/login">로그인</a></li>
     </ul>
     <ul th:if="${session.user}">
         <li><a th:text="${session.user.username}"></a>
             <ul>
-                <li><a href="/post/write">Write Post</a></li>
-                <li><a href="/user/logout">Logout</a></li>
+                <li><a href="/post/write">글 작성</a></li>
+                <li><a href="/user/logout">로그아웃</a></li>
             </ul>
         </li>
     </ul>
@@ -45,8 +45,8 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>Title</th>
-            <th>Username</th>
+            <th>제목</th>
+            <th>이름</th>
         </tr>
         </thead>
         <tbody>

@@ -3,20 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <link href="/css/no.css" rel="stylesheet" type="text/css">
-    <title>Write Post</title>
+    <title>게시판</title>
 </head>
 <body>
 <div class="c75">
     <form method="post" th:action="@{'/post/edit/' + ${post.id}}">
-        <div><label>Title</label></div>
-        <input name="title" placeholder="title" th:disabled="${session.user eq null or session.user.id ne post.user.id}" th:field="${post.title}" type="text">
-        <div><label>Content</label></div>
-        <textarea name="content" placeholder="content" th:disabled="${session.user eq null or session.user.id ne post.user.id}" th:field="${post.content}"></textarea>
-        <button th:unless="${session.user eq null or session.user.id ne post.user.id}" type="submit">Edit</button>
+        <div>
+            <label>제목</label>
+        </div>
+        <input name="title" placeholder="Title" th:disabled="${session.user == null or session.user.id != post.user.id}" th:value="${post.title}" type="text">
+        <div>
+            <label>내용</label>
+        </div>
+        <textarea name="content" placeholder="Content" th:disabled="${session.user == null or session.user.id != post.user.id}" th:text="${post.content}"></textarea>
+        <button th:unless="${session.user == null or session.user.id != post.user.id}" type="submit">글 수정</button>
     </form>
     <form method="get" th:action="@{'/post/delete/' + ${post.id}}">
-        <button th:unless="${session.user eq null or session.user.id ne post.user.id}" type="submit">Delete</button>
+        <button th:unless="${session.user == null or session.user.id != post.user.id}" type="submit">글 삭제</button>
     </form>
+    <form method="post" th:action="@{'/comment/write/' + ${post.id}}">
+        <div>
+            <label>댓글</label>
+        </div>
+        <textarea name="content" placeholder="comment"></textarea>
+        <button type="submit">댓글 작성</button>
+    </form>
+    <div>
+        <table>
+            <tbody>
+            <tr th:each="comment : ${post.comments}">
+                <td th:text="${comment.user.username}"></td>
+                <td th:text="${comment.content}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

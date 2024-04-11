@@ -35,13 +35,13 @@ public class UserService {
     }
 
     public User login(String email, String password) {
-        Optional<User> find = userRepository.findByEmail(email);
-        if(find.isEmpty()) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isEmpty()) {
             throw new IllegalStateException("USER IS NOT EXIST");
         }
-        User user = find.get();
-        validateCorrectPassword(user, password);
-        return user;
+        User loginUser = user.get();
+        validateCorrectPassword(loginUser, password);
+        return loginUser;
     }
 
     private void validateCorrectPassword(User user, String password) {
