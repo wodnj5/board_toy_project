@@ -21,10 +21,14 @@ public class CommentService {
     public Long write(User user, Long postId, String content) {
         Optional<Post> post = postRepository.findById(postId);
         if(post.isEmpty()) {
-            throw new RuntimeException("POST IS NOT EXCEPTION");
+            throw new IllegalStateException("POST IS NOT EXIST");
         }
         Comment comment = new Comment(user, post.get(), content);
         commentRepository.save(comment);
         return comment.getId();
+    }
+
+    public void delete(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }

@@ -5,6 +5,7 @@ import com.wodnj5.board.form.CommentForm;
 import com.wodnj5.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -22,5 +23,11 @@ public class CommentController {
         }
         commentService.write(user, id, form.getContent());
         return "redirect:/post/read/" + id;
+    }
+
+    @GetMapping("/comment/delete/{postId}/{commentId}")
+    public String delete(@PathVariable Long postId, @PathVariable Long commentId ) {
+        commentService.delete(commentId);
+        return "redirect:/post/read/" + postId;
     }
 }
