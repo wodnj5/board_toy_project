@@ -18,9 +18,7 @@
         <textarea name="content" placeholder="Content" th:disabled="${session.user == null or session.user.id != post.user.id}" th:text="${post.content}"></textarea>
         <button th:unless="${session.user == null or session.user.id != post.user.id}" type="submit">글 수정</button>
     </form>
-    <form method="get" th:action="@{'/post/delete/' + ${post.id}}">
-        <button th:unless="${session.user == null or session.user.id != post.user.id}" type="submit">글 삭제</button>
-    </form>
+    <a th:href="@{'/post/delete/' + ${post.id}}" th:unless="${session.user == null or session.user.id != post.user.id}">글 삭제</a>
     <form method="post" th:action="@{'/comment/write/' + ${post.id}}">
         <div>
             <label>댓글</label>

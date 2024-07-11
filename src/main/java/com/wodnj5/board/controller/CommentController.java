@@ -5,6 +5,7 @@ import com.wodnj5.board.form.CommentForm;
 import com.wodnj5.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +18,18 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comment/write/{id}")
-    public String write(CommentForm form, @PathVariable Long id, @SessionAttribute(name = "user", required = false) User user) {
+    public String write(CommentForm form, @PathVariable Long id, @SessionAttribute(name = "user", required = false) User user, Model model) {
         if(user == null) {
             return "redirect:/user/login";
         }
-        commentService.write(user, id, form.getContent());
-        return "redirect:/post/read/" + id;
+        try {
+            commentService.write(user, id, form.getContent());
+            return "redirect:/post/read/" + id;
+        } catch (IllegalStateException e) {
+            model.addAttribute("em", e.getMessage());
+            model.addAttribute("url", "redirect:/");
+            return "error";
+        }
     }
 
     @GetMapping("/comment/delete/{postId}/{commentId}")
