@@ -21,7 +21,7 @@ public class CommentService {
     public Long write(User user, Long postId, String content) {
         Optional<Post> post = postRepository.findById(postId);
         if(post.isEmpty()) {
-            throw new IllegalStateException("POST IS NOT EXIST");
+            throw new IllegalStateException("게시글이 존재하지 않습니다.");
         }
         Comment comment = new Comment(user, post.get(), content);
         commentRepository.save(comment);

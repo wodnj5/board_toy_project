@@ -31,7 +31,7 @@ public class PostService {
     public Post findOne(Long id) {
         Optional<Post> post = postRepository.findById(id);
         if(post.isEmpty()) {
-            throw new IllegalStateException("POST IS NOT EXIST");
+            throw new IllegalStateException("게시글이 존재하지 않습니다.");
         }
         return post.get();
     }
@@ -39,7 +39,7 @@ public class PostService {
     public void edit(Long id, String title, String content) {
         Optional<Post> post = postRepository.findById(id);
         if(post.isEmpty()) {
-            throw new IllegalStateException("POST IS NOT EXIST");
+            throw new IllegalStateException("게시글이 존재하지 않습니다.");
         }
         post.get().edit(title, content);
     }
