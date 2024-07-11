@@ -26,7 +26,10 @@ public class CommentController {
     }
 
     @GetMapping("/comment/delete/{postId}/{commentId}")
-    public String delete(@PathVariable Long postId, @PathVariable Long commentId ) {
+    public String delete(@PathVariable Long postId, @PathVariable Long commentId, @SessionAttribute(name = "user", required = false) User user ) {
+        if(user == null) {
+            return "redirect:/user/login";
+        }
         commentService.delete(commentId);
         return "redirect:/post/read/" + postId;
     }
