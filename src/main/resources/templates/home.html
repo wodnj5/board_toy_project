@@ -1,47 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <link href="/css/no.css" rel="stylesheet" type="text/css">
     <title>게시판</title>
 </head>
 <body>
-<nav class="black">
-    <a>게시판</a>
-    <label for="hamburger">&#9776;</label>
-    <ul>
-        <!---
-        <li><a>Home</a></li>
-        <li><a>Test1</a></li>
-        <li><a>Test2</a></li>
-        <li><a>Test3</a></li>
+<nav>
+    <ul sec:authorize="!isAuthenticated()">
+        <li><a th:href="@{/signup}">회원가입</a></li>
+        <li><a th:href="@{/login}">로그인</a></li>
+    </ul>
+    <ul sec:authorize="isAuthenticated()">
         <li>
-            <a>Test4</a>
+            <a th:text="${#authentication.principal.nickname + '님 어서오세요!'}"></a>
             <ul>
-                <li><a>Test5</a></li>
-                <li><a>Test6</a></li>
-                <li><a>Test7</a></li>
-                <li><a>Test8</a></li>
-            </ul>
-        </li>
-        ---->
-    </ul>
-    <input id="hamburger" type="checkbox" />
-    <ul th:unless="${session.user}">
-        <li><a href="/user/join">회원가입</a></li>
-        <li><a href="/user/login">로그인</a></li>
-    </ul>
-    <ul th:if="${session.user}">
-        <li><a th:text="${session.user.username}"></a>
-            <ul>
-                <li><a href="/post/write">글 작성</a></li>
-                <li><a href="/user/logout">로그아웃</a></li>
+                <li><a th:href="@{/post/write}">글 작성</a></li>
+                <li><a th:href="@{/logout}">로그아웃</a></li>
             </ul>
         </li>
     </ul>
 </nav>
 <div>
-    <table>
+    <table border="1">
         <thead>
         <tr>
             <th>#</th>
@@ -52,8 +34,8 @@
         <tbody>
         <tr th:each="post : ${posts}">
             <td th:text="${post.id}"></td>
-            <td><a th:href="${'/post/read/' + post.id}" th:text="${post.title}"></a></td>
-            <td th:text="${post.user.username}"></td>
+            <td><a th:href="@{'/post/' + ${post.id}}" th:text="${post.title}"></a></td>
+            <td th:text="${post.user.nickname}"></td>
         </tr>
         </tbody>
     </table>

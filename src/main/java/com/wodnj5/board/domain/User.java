@@ -25,21 +25,16 @@ public class User {
     @Column(nullable = false)
     private String password;
     @Column(unique = true, nullable = false)
-    private String username;
+    private String nickname;
+    @Column(nullable = false)
+    private String role;
     private LocalDateTime createdAt;
 
-    public User(String email, String password, String username) {
+    public User(String email, String password, String nickname, String role) {
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.nickname = nickname;
+        this.role = role;
         this.createdAt = LocalDateTime.now();
     }
-
-    /*
-        CREATE TABLE users (id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL,
-        username VARCHAR(255) NOT NULL UNIQUE,
-        created_at DATETIME);
-    */
 }

@@ -33,29 +33,20 @@ public class Post {
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
-    private String content;
+    private String contents;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
     private LocalDateTime createdAt;
 
-    public Post(User user, String title, String content) {
+    public Post(User user, String title, String contents) {
         this.user = user;
         this.title = title;
-        this.content = content;
+        this.contents = contents;
         this.createdAt = LocalDateTime.now();
     }
 
-    /*
-        CREATE TABLE posts (id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        user_id BIGINT NOT NULL,
-        title VARCHAR(255) NOT NULL,
-        content VARCHAR(255) NOT NULL,
-        created_at DATETIME,
-        FOREIGN KEY(user_id) REFERENCES users(id));
-    */
-
-    public void edit(String title, String content) {
+    public void edit(String title, String contents) {
         this.title = title;
-        this.content = content;
+        this.contents = contents;
     }
 }

@@ -29,24 +29,14 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
     @Column(nullable = false)
-    private String content;
+    private String contents;
     private LocalDateTime createdAt;
 
-    public Comment(User user, Post post, String content) {
+    public Comment(User user, Post post, String contents) {
         this.user = user;
         this.post = post;
-        this.content = content;
+        this.contents = contents;
         this.createdAt = LocalDateTime.now();
         post.getComments().add(this);
     }
-
-    /*
-        CREATE TABLE comments (id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        user_id BIGINT NOT NULL,
-        post_id BIGINT NOT NULL,
-        content varchar(1000) NOT NULL,
-        created_at DATETIME,
-        FOREIGN KEY(user_id) REFERENCES users(id),
-        FOREIGN KEY(post_id) REFERENCES posts(id));
-     */
 }

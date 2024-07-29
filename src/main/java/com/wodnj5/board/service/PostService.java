@@ -4,7 +4,6 @@ import com.wodnj5.board.domain.Post;
 import com.wodnj5.board.domain.User;
 import com.wodnj5.board.repository.PostRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,19 +28,12 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Post findOne(Long id) {
-        Optional<Post> post = postRepository.findById(id);
-        if(post.isEmpty()) {
-            throw new IllegalStateException("게시글이 존재하지 않습니다.");
-        }
-        return post.get();
+        return postRepository.findById(id).orElseThrow(() -> new IllegalStateException("게시글이 존재하지 않습니다."));
     }
 
-    public void edit(Long id, String title, String content) {
-        Optional<Post> post = postRepository.findById(id);
-        if(post.isEmpty()) {
-            throw new IllegalStateException("게시글이 존재하지 않습니다.");
-        }
-        post.get().edit(title, content);
+    public void edit(Long id, String title, String contents) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalStateException("게시글이 존재하지 않습니다."));
+        post.edit(title, contents);
     }
 
     public void delete(Long id) {

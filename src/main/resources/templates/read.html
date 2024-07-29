@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <link href="/css/no.css" rel="stylesheet" type="text/css">
@@ -7,32 +8,32 @@
 </head>
 <body>
 <div class="c75">
-    <form method="post" th:action="@{'/post/edit/' + ${post.id}}">
+    <form method="post" th:action="@{'/post/' + ${post.id} + '/edit'}">
         <div>
             <label>제목</label>
         </div>
-        <input name="title" placeholder="Title" th:disabled="${session.user == null or session.user.id != post.user.id}" th:value="${post.title}" type="text">
+        <input name="title" placeholder="Title" th:disabled="${#authentication.principal.id != post.user.id}" th:value="${post.title}" type="text">
         <div>
             <label>내용</label>
         </div>
-        <textarea name="content" placeholder="Content" th:disabled="${session.user == null or session.user.id != post.user.id}" th:text="${post.content}"></textarea>
-        <button th:unless="${session.user == null or session.user.id != post.user.id}" type="submit">글 수정</button>
+        <textarea name="contents" placeholder="Contents" th:disabled="${#authentication.principal.id != post.user.id}" th:text="${post.contents}"></textarea>
+        <button th:unless="${#authentication.principal.id != post.user.id}" type="submit">글 수정</button>
     </form>
-    <a th:href="@{'/post/delete/' + ${post.id}}" th:unless="${session.user == null or session.user.id != post.user.id}">글 삭제</a>
-    <form method="post" th:action="@{'/comment/write/' + ${post.id}}">
+    <a th:href="@{'/post/' + ${post.id} + '/delete'}" th:if="${#authentication.principal.id == post.user.id}">글 삭제</a>
+    <form method="post" th:action="@{'/post/' + ${post.id} + '/comment/write'}">
         <div>
             <label>댓글</label>
         </div>
-        <textarea name="content" placeholder="comment"></textarea>
+        <textarea name="contents" placeholder="comment"></textarea>
         <button type="submit">댓글 작성</button>
     </form>
     <div>
         <table>
             <tbody>
             <tr th:each="comment : ${post.comments}">
-                <td th:text="${comment.user.username}"></td>
-                <td th:text="${comment.content}"></td>
-                <td><a th:href="@{'/comment/delete/' + ${post.id} + '/' + ${comment.id}}" th:unless="${session.user == null or session.user.id != comment.user.id}">삭제</a></td>
+                <td th:text="${comment.user.nickname}"></td>
+                <td th:text="${comment.contents}"></td>
+                <td><a th:href="@{'/post/' + ${post.id} + '/comment/' + ${comment.id} + '/delete'}" th:if="${#authentication.principal.id == comment.user.id}">삭제</a></td>
             </tr>
             </tbody>
         </table>

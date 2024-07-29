@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,11 +8,11 @@
 </head>
 <body>
 <div class="c75">
-    <form action="/post/write" method="post">
+    <form method="post" th:action="@{/post/write}">
         <div><label>제목</label></div>
         <input name="title" placeholder="title" type="text">
         <div><label>내용</label></div>
-        <textarea name="content" placeholder="content"></textarea>
+        <textarea name="contents" placeholder="contents"></textarea>
         <button type="submit">글 작성</button>
     </form>
 </div>

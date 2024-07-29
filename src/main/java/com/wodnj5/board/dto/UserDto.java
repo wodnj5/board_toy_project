@@ -1,14 +1,14 @@
-package com.wodnj5.board.form;
+package com.wodnj5.board.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class JoinForm {
+public class UserDto {
 
     private String email;
     private String password;
-    private String username;
+    private String nickname;
 
 }

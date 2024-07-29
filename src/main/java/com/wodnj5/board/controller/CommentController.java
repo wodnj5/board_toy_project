@@ -1,15 +1,15 @@
 package com.wodnj5.board.controller;
 
-import com.wodnj5.board.domain.User;
-import com.wodnj5.board.form.CommentForm;
+import com.wodnj5.board.domain.UserDetailsImpl;
+import com.wodnj5.board.dto.CommentDto;
 import com.wodnj5.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,27 +17,15 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comment/write/{id}")
-    public String write(CommentForm form, @PathVariable Long id, @SessionAttribute(name = "user", required = false) User user, Model model) {
-        if(user == null) {
-            return "redirect:/user/login";
-        }
-        try {
-            commentService.write(user, id, form.getContent());
-            return "redirect:/post/read/" + id;
-        } catch (IllegalStateException e) {
-            model.addAttribute("em", e.getMessage());
-            model.addAttribute("url", "redirect:/");
-            return "error";
-        }
+    @PostMapping("/post/{id}/comment/write")
+    public String write(CommentDto dto, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        commentService.write(userDetails.getUser(), id, dto.getContents());
+        return "redirect:/post/" + id;
     }
 
-    @GetMapping("/comment/delete/{postId}/{commentId}")
-    public String delete(@PathVariable Long postId, @PathVariable Long commentId, @SessionAttribute(name = "user", required = false) User user ) {
-        if(user == null) {
-            return "redirect:/user/login";
-        }
+    @GetMapping("/post/{postId}/comment/{commentId}/delete")
+    public String delete(@PathVariable Long postId, @PathVariable Long commentId) {
         commentService.delete(commentId);
-        return "redirect:/post/read/" + postId;
+        return "redirect:/post/" + postId;
     }
 }

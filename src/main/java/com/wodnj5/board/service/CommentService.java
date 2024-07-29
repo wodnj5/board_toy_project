@@ -5,7 +5,6 @@ import com.wodnj5.board.domain.Post;
 import com.wodnj5.board.domain.User;
 import com.wodnj5.board.repository.CommentRepository;
 import com.wodnj5.board.repository.PostRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +17,9 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public Long write(User user, Long postId, String content) {
-        Optional<Post> post = postRepository.findById(postId);
-        if(post.isEmpty()) {
-            throw new IllegalStateException("게시글이 존재하지 않습니다.");
-        }
-        Comment comment = new Comment(user, post.get(), content);
+    public Long write(User user, Long postId, String contents) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalStateException("게시글이 존재하지 않습니다."));
+        Comment comment = new Comment(user, post, contents);
         commentRepository.save(comment);
         return comment.getId();
     }

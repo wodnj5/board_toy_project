@@ -1,13 +1,13 @@
-package com.wodnj5.board.form;
+package com.wodnj5.board.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class PostForm {
+public class PostDto {
 
     private String title;
-    private String content;
+    private String contents;
 
 }
