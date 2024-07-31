@@ -4,20 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <link href="/css/no.css" rel="stylesheet" type="text/css">
-    <title>게시판</title>
+    <title>Board</title>
 </head>
 <body>
 <nav>
     <ul sec:authorize="!isAuthenticated()">
-        <li><a th:href="@{/signup}">회원가입</a></li>
-        <li><a th:href="@{/login}">로그인</a></li>
+        <li><a th:href="@{/signup}">Signup</a></li>
+        <li><a th:href="@{/login}">Login</a></li>
     </ul>
     <ul sec:authorize="isAuthenticated()">
         <li>
-            <a th:text="${#authentication.principal.nickname + '님 어서오세요!'}"></a>
+            <a th:text="${#authentication.principal.nickname}"></a>
             <ul>
-                <li><a th:href="@{/post/write}">글 작성</a></li>
-                <li><a th:href="@{/logout}">로그아웃</a></li>
+                <li><a th:href="@{/post/upload}">Upload Post</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
             </ul>
         </li>
     </ul>
@@ -27,8 +27,8 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>제목</th>
-            <th>이름</th>
+            <th>Title</th>
+            <th>Nickname</th>
         </tr>
         </thead>
         <tbody>

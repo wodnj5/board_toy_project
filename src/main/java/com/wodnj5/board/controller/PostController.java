@@ -17,27 +17,32 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/post/write")
-    public String write() {
-        return "write";
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("posts", postService.findAll());
+        return "home";
     }
 
-    @PostMapping("/post/write")
-    public String write(PostDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
-        postService.write(userDetails.getUser(), dto.getTitle(), dto.getContents());
+    @GetMapping("/post/upload")
+    public String upload() {
+        return "upload";
+    }
+
+    @PostMapping("/post/upload")
+    public String upload(PostDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.upload(userDetails.getUser(), dto.getTitle(), dto.getContents(), dto.getPostFiles());
         return "redirect:/";
     }
 
     @GetMapping("/post/{id}")
-    public String read(@PathVariable Long id, Model model) {
+    public String post(@PathVariable Long id, Model model) {
         model.addAttribute("post", postService.findOne(id));
-        return "read";
+        return "post";
     }
 
-    @PostMapping("/post/{id}/edit")
-    public String edit(@PathVariable Long id, PostDto dto, Model model) {
-        postService.edit(id, dto.getTitle(), dto.getContents());
-        return "redirect:/post/" + id;
+    @PostMapping("/post/edit")
+    public String edit(PostDto dto) {
+        return "redirect:/post/" + postService.edit(dto.getId(), dto.getTitle(), dto.getContents(), dto.getPostFiles());
     }
 
     @GetMapping("/post/{id}/delete")

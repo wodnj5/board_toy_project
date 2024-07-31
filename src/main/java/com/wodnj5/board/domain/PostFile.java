@@ -15,28 +15,27 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "comments")
+@Table(name = "post_files")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class PostFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
     @Column(nullable = false)
-    private String contents;
-    private LocalDateTime createdAt;
+    private String fileName;
+    @Column(nullable = false)
+    private String url;
+    private LocalDateTime uploadedAt;
 
-    public Comment(User user, Post post, String contents) {
-        this.user = user;
+    public PostFile(Post post, String fileName, String url) {
         this.post = post;
-        this.contents = contents;
-        this.createdAt = LocalDateTime.now();
-        post.getComments().add(this);
+        this.fileName = fileName;
+        this.url = url;
+        this.uploadedAt = LocalDateTime.now();
+        this.post.addFile(this);
     }
 }

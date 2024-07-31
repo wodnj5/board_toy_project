@@ -12,6 +12,23 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+  servlet:
+    multipart:
+      enabled: true
+      fileSizeThreshold: 0B
+      maxFileSize: 1MB
+      maxRequestSize: 10MB
+cloud:
+  aws:
+    region:
+      static: ap-southeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket: board-bucket-w0dnj5
 logging:
   level:
     org:

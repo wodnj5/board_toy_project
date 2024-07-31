@@ -18,16 +18,16 @@ public class UserService {
     public Long signup(String email, String password, String nickname) {
         validateDuplicateEmail(email);
         validateDuplicateNickname(nickname);
-        User newbie = new User(email, bCryptPasswordEncoder.encode(password), nickname, "ROLE_USER");
-        userRepository.save(newbie);
-        return newbie.getId();
+        User user = new User(email, bCryptPasswordEncoder.encode(password), nickname, "ROLE_USER");
+        userRepository.save(user);
+        return user.getId();
     }
 
     private void validateDuplicateEmail(String email) {
-        if(userRepository.findByEmail(email).isPresent()) throw new IllegalStateException("이미 사용된 이메일입니다.");
+        if(userRepository.findByEmail(email).isPresent()) throw new IllegalStateException("email is already used");
     }
 
     private void validateDuplicateNickname(String nickname) {
-        if(userRepository.findByNickname(nickname).isPresent()) throw new IllegalStateException("이미 사용된 닉네임입니다.");
+        if(userRepository.findByNickname(nickname).isPresent()) throw new IllegalStateException("email is already used");
     }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="/css/no.css" rel="stylesheet" type="text/css">
+    <title>Board</title>
+</head>
+<body>
+<div class="c75">
+    <form method="post" th:action="@{'/post/edit'}">
+        <div>
+            <label>Nickname</label>
+        </div>
+        <p th:text="${post.user.nickname}"></p>
+        <input name="id" th:value="${post.id}" type="hidden">
+        <div>
+            <label>Title</label>
+        </div>
+        <input name="title" placeholder="Title" th:disabled="${#authentication.principal.id ne post.user.id}" th:value="${post.title}" type="text">
+        <div>
+            <label>Contents</label>
+        </div>
+        <textarea name="contents" placeholder="Contents" th:disabled="${#authentication.principal.id ne post.user.id}" th:text="${post.contents}"></textarea>
+        <div><label>Files</label></div>
+        <input multiple name="postFiles" th:disabled="${#authentication.principal.id ne post.user.id}" type="file">
+        <button th:unless="${#authentication.principal.id ne post.user.id}" type="submit">Edit</button>
+        <a th:href="@{'/post/' + ${post.id} + '/delete'}" th:if="${#authentication.principal.id eq post.user.id}">Delete</a>
+    </form>
+</div>
+</body>
+</html>

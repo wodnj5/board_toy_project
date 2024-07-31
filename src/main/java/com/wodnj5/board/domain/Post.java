@@ -32,21 +32,29 @@ public class Post {
     private User user;
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String contents;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
-    private LocalDateTime createdAt;
+    private List<PostFile> postFiles = new ArrayList<>();
+    private LocalDateTime uploadedAt;
 
     public Post(User user, String title, String contents) {
         this.user = user;
         this.title = title;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
+        this.uploadedAt = LocalDateTime.now();
     }
 
     public void edit(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+
+    public void addFile(PostFile file) {
+        postFiles.add(file);
+    }
+
+    public void clearFiles() {
+        postFiles.clear();
     }
 }
