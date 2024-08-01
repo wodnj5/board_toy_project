@@ -11,6 +11,7 @@
 <img src="https://img.shields.io/badge/spring-20232a.svg?style=for-the-badge&logo=spring&logoColor=6DB33F" />
 <img src="https://img.shields.io/badge/springboot-20232a.svg?style=for-the-badge&logo=springboot&logoColor=6DB33F" />
 <img src="https://img.shields.io/badge/spring security-20232a.svg?style=for-the-badge&logo=springsecurity&logoColor=6DB33F" />
+<img src="https://img.shields.io/badge/bootstrap-20232a.svg?style=for-the-badge&logo=bootstrap&logoColor=7952B3" />
 
 ## 파일 저장소 
 
