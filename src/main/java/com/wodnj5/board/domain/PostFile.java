@@ -26,16 +26,22 @@ public class PostFile {
     @JoinColumn(name = "post_id")
     private Post post;
     @Column(nullable = false)
-    private String fileName;
+    private String name;
+    @Column(nullable = false)
+    private String fileKey;
     @Column(nullable = false)
     private String url;
     private LocalDateTime uploadedAt;
 
-    public PostFile(Post post, String fileName, String url) {
+    public PostFile(Post post, String name, String fileKey, String url) {
         this.post = post;
-        this.fileName = fileName;
+        this.name = name;
+        this.fileKey = fileKey;
         this.url = url;
         this.uploadedAt = LocalDateTime.now();
-        this.post.addFile(this);
+    }
+
+    public void delete() {
+        this.post = null;
     }
 }

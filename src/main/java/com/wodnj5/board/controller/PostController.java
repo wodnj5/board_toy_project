@@ -30,7 +30,7 @@ public class PostController {
 
     @PostMapping("/post/upload")
     public String upload(PostDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.upload(userDetails.getUser(), dto.getTitle(), dto.getContents(), dto.getPostFiles());
+        postService.upload(userDetails.getUser(), dto.getTitle(), dto.getContents(), dto.getFiles());
         return "redirect:/";
     }
 
@@ -42,7 +42,7 @@ public class PostController {
 
     @PostMapping("/post/edit")
     public String edit(PostDto dto) {
-        return "redirect:/post/" + postService.edit(dto.getId(), dto.getTitle(), dto.getContents(), dto.getPostFiles());
+        return "redirect:/post/" + postService.edit(dto.getId(), dto.getTitle(), dto.getContents(), dto.getFileIds(), dto.getFiles());
     }
 
     @GetMapping("/post/{id}/delete")

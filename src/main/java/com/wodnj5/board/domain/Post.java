@@ -34,7 +34,7 @@ public class Post {
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String contents;
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostFile> postFiles = new ArrayList<>();
     private LocalDateTime uploadedAt;
 
@@ -50,11 +50,20 @@ public class Post {
         this.contents = contents;
     }
 
-    public void addFile(PostFile file) {
+    public void saveFile(PostFile file) {
         postFiles.add(file);
     }
 
-    public void clearFiles() {
-        postFiles.clear();
+    public List<PostFile> deleteFiles(List<Long> fileIds) {
+        List<PostFile> filesToDelete =  postFiles.stream()
+                .filter(file -> fileIds.contains(file.getId()))
+                .toList();
+        filesToDelete.forEach(this::deleteFile);
+        return filesToDelete;
+    }
+
+    private void deleteFile(PostFile file) {
+        postFiles.remove(file);
+        file.delete();
     }
 }

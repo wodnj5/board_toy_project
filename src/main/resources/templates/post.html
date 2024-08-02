@@ -15,21 +15,21 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" th:href="@{/}">Board</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
-                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <button aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarTogglerDemo02" data-bs-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+                        <a aria-current="page" class="nav-link active" th:href="@{/}">Home</a>
                     </li>
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
                         <a class="nav-link active" th:href="@{/login}">Login</a>
                     </li>
                     <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                        <a th:text="${#authentication.principal.nickname}" class="nav-link dropdown-toggle" href="#"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                            href="#" role="button" th:text="${#authentication.principal.nickname}"></a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/post/upload}">Upload New Post</a></li>
                             <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
@@ -37,32 +37,39 @@
                     </li>
                 </ul>
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <input aria-label="Search" class="form-control me-2" placeholder="Search" type="search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
         </div>
     </nav>
     <div class="mx-auto p-2" style="width: 1000px;">
-        <form enctype="multipart/form-data" method="post" th:action="@{'/post/edit'}"></form>
-        <input name="id" th:value="${post.id}" type="hidden">
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Title</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Title" th:disabled="${#authentication.principal.id ne post.user.id}"
-            th:value="${post.title}">
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Contents</label>
-            <textarea name="contents" placeholder="Contents"
-            th:disabled="${#authentication.principal.id ne post.user.id}" th:text="${post.contents}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="formFileMultiple" class="form-label">Upload Files</label>
-            <input class="form-control" type="file" id="formFileMultiple" multiple>
-        </div>
-        <button th:unless="${#authentication.principal.id ne post.user.id}" type="submit" class="btn btn-primary">Edit</button>
-        <a class="btn btn-primary" th:href="@{'/post/' + ${post.id} + '/delete'}"
-                th:if="${#authentication.principal.id eq post.user.id}">Delete</a>
+        <form enctype="multipart/form-data" method="post" th:action="@{'/post/edit'}">
+            <input name="id" th:value="${post.id}" type="hidden">
+            <div class="mb-3">
+                <label class="form-label" for="exampleFormControlInput1">Title</label>
+                <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="Title" th:disabled="${#authentication.principal.id ne post.user.id}" th:value="${post.title}"
+                type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="exampleFormControlTextarea1">Contents</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1"
+                name="contents" placeholder="Contents" rows="3" th:disabled="${#authentication.principal.id ne post.user.id}" th:text="${post.contents}"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="formFileMultiple">Uploaded Files</label>
+                <div class="form-check form-switch" th:each="postFile : ${post.postFiles}">
+                    <input class="form-check-input" id="flexSwitchCheckDefault" name="fileIds" role="switch" th:disabled="${#authentication.principal.id ne post.user.id}" th:value="${postFile.id}" type="checkbox">
+                    <label class="form-check-label" for="flexSwitchCheckDefault"><a th:href="@{${postFile.url}}" th:text="${postFile.name}"></a></label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="formFileMultiple">Upload Files</label>
+                <input class="form-control" id="formFileMultiple" multiple name="files" type="file">
+            </div>
+            <button class="btn btn-primary" th:unless="${#authentication.principal.id ne post.user.id}" type="submit">Edit</button>
+            <a class="btn btn-danger" th:href="@{'/post/' + ${post.id} + '/delete'}"
+                    th:if="${#authentication.principal.id eq post.user.id}">Delete</a>
         </form>
     </div>
     <script crossorigin="anonymous" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

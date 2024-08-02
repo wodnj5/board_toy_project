@@ -36,6 +36,6 @@ public class AwsS3Bucket {
     }
 
     public void deleteObject(PostFile file) {
-        amazonS3.deleteObject(bucket, file.getFileName());
+        amazonS3.deleteObject(bucket, file.getFileKey());
     }
 }
