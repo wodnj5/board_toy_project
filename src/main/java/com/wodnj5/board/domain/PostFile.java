@@ -28,20 +28,20 @@ public class PostFile {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String fileKey;
+    private String s3Key;
     @Column(nullable = false)
     private String url;
     private LocalDateTime uploadedAt;
 
-    public PostFile(Post post, String name, String fileKey, String url) {
+    public PostFile(Post post, String name, String s3Key, String url) {
         this.post = post;
         this.name = name;
-        this.fileKey = fileKey;
+        this.s3Key = s3Key;
         this.url = url;
         this.uploadedAt = LocalDateTime.now();
     }
 
     public void delete() {
-        this.post = null;
+        post = null;
     }
 }

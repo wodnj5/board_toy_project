@@ -9,10 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 public class PostDto {
 
-    private Long id;
     private String title;
     private String contents;
-    private List<String> fileIds;
+    private List<Long> fileIds;
     private List<MultipartFile> files;
 
 }

@@ -54,16 +54,13 @@ public class Post {
         postFiles.add(file);
     }
 
-    public List<PostFile> deleteFiles(List<Long> fileIds) {
-        List<PostFile> filesToDelete =  postFiles.stream()
-                .filter(file -> fileIds.contains(file.getId()))
-                .toList();
-        filesToDelete.forEach(this::deleteFile);
-        return filesToDelete;
+    public List<PostFile> findAllById(List<Long> ids) {
+        return postFiles.stream().filter(file -> ids.contains(file.getId())).toList();
     }
 
-    private void deleteFile(PostFile file) {
-        postFiles.remove(file);
+    public void deleteFile(PostFile file) {
         file.delete();
+        postFiles.remove(file);
     }
+
 }

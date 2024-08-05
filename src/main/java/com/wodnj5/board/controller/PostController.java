@@ -23,29 +23,29 @@ public class PostController {
         return "home";
     }
 
-    @GetMapping("/post/upload")
+    @GetMapping("/post")
     public String upload() {
         return "upload";
     }
 
-    @PostMapping("/post/upload")
+    @PostMapping("/post")
     public String upload(PostDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.upload(userDetails.getUser(), dto.getTitle(), dto.getContents(), dto.getFiles());
         return "redirect:/";
     }
 
     @GetMapping("/post/{id}")
-    public String post(@PathVariable Long id, Model model) {
+    public String get(@PathVariable Long id, Model model) {
         model.addAttribute("post", postService.findOne(id));
         return "post";
     }
 
-    @PostMapping("/post/edit")
-    public String edit(PostDto dto) {
-        return "redirect:/post/" + postService.edit(dto.getId(), dto.getTitle(), dto.getContents(), dto.getFileIds(), dto.getFiles());
+    @PostMapping("/post/{id}/edit")
+    public String edit(@PathVariable Long id, PostDto dto) {
+        return "redirect:/post/" + postService.edit(id, dto.getTitle(), dto.getContents(), dto.getFileIds(), dto.getFiles());
     }
 
-    @GetMapping("/post/{id}/delete")
+    @PostMapping("/post/{id}/delete")
     public String delete(@PathVariable Long id) {
         postService.delete(id);
         return "redirect:/";

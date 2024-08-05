@@ -6,7 +6,6 @@ import com.wodnj5.board.domain.User;
 import com.wodnj5.board.repository.AwsS3Bucket;
 import com.wodnj5.board.repository.PostRepository;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +25,7 @@ public class PostService {
     public Long upload(User user, String title, String content, List<MultipartFile> multipartFiles) {
         Post post = new Post(user, title, content);
         postRepository.save(post);
-        uploadFiles(post, multipartFiles);
+        saveFiles(post, multipartFiles);
         return post.getId();
     }
 
@@ -40,12 +39,17 @@ public class PostService {
         return postRepository.findById(id).orElseThrow(() -> new IllegalStateException("post is not exist"));
     }
 
-    public Long edit(Long id, String title, String contents, List<String> fileIds, List<MultipartFile> multipartFiles) {
+    public Long edit(Long id, String title, String contents, List<Long> fileIds, List<MultipartFile> multipartFiles) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalStateException("post is not exist"));
         post.edit(title, contents);
-        List<PostFile> filesToDelete = post.deleteFiles(convertToLong(fileIds));
-        deleteFiles(filesToDelete);
-        uploadFiles(post, multipartFiles);
+        saveFiles(post, multipartFiles);
+        if(Optional.ofNullable(fileIds).isPresent()) {
+            List<PostFile> filesToDelete = post.findAllById(fileIds);
+            filesToDelete.forEach(file -> {
+                post.deleteFile(file);
+                awsS3Bucket.deleteObject(file);
+            });
+        }
         return post.getId();
     }
 
@@ -55,25 +59,14 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    private void uploadFiles(Post post, List<MultipartFile> multipartFiles) {
+    private void saveFiles(Post post, List<MultipartFile> multipartFiles) {
         multipartFiles.stream()
-                .filter(file -> !file.getOriginalFilename().isEmpty())
-                .forEach(file -> uploadToBucket(post, file));
+                .filter(file -> Optional.ofNullable(file.getOriginalFilename()).isPresent())
+                .forEach(file -> saveFile(post, file));
     }
 
-    private void deleteFiles(List<PostFile> filesToDelete) {
-        filesToDelete.forEach(awsS3Bucket::deleteObject);
-    }
-
-    private void uploadToBucket(Post post, MultipartFile file) {
-        String key = "post" + File.separator + UUID.randomUUID();
-        post.saveFile(new PostFile(post, file.getOriginalFilename(), key, awsS3Bucket.uploadObject(key, file)));
-    }
-
-    private List<Long> convertToLong(List<String> fileIds) {
-        if(Optional.ofNullable(fileIds).isEmpty()) return new ArrayList<>();
-        return fileIds.stream()
-                .map(Long::parseLong)
-                .toList();
+    private void saveFile(Post post, MultipartFile file) {
+        String s3Key = "post" + File.separator + UUID.randomUUID();
+        post.saveFile(new PostFile(post, file.getOriginalFilename(), s3Key, awsS3Bucket.uploadObject(s3Key, file)));
     }
 }
