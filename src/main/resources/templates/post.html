@@ -46,21 +46,21 @@
         <div class="mb-3">
             <label class="form-label" for="exampleFormControlInput1">Title</label>
             <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="Title"
-                   th:disabled="${#authentication.principal.id ne post.user.id}" th:value="${post.title}"
+                   th:disabled="${#authentication.principal.id ne post.userId}" th:value="${post.title}"
                    type="text">
         </div>
         <div class="mb-3">
             <label class="form-label" for="exampleFormControlTextarea1">Contents</label>
             <textarea class="form-control" id="exampleFormControlTextarea1"
                       name="contents" placeholder="Contents" rows="3"
-                      th:disabled="${#authentication.principal.id ne post.user.id}"
+                      th:disabled="${#authentication.principal.id ne post.userId}"
                       th:text="${post.contents}"></textarea>
         </div>
         <div class="mb-3">
             <label class="form-label" for="formFileMultiple">Uploaded Files</label>
             <div class="form-check" th:each="postFile : ${post.postFiles}">
-                <input class="form-check-input" id="flexSwitchCheckDefault" name="fileIds" role="switch"
-                       th:disabled="${#authentication.principal.id ne post.user.id}" th:value="${postFile.id}"
+                <input class="form-check-input" id="flexSwitchCheckDefault" name="deleteFileIds" role="switch"
+                       th:disabled="${#authentication.principal.id ne post.userId}" th:value="${postFile.id}"
                        type="checkbox">
                 <label class="form-check-label" for="flexSwitchCheckDefault"><a th:href="@{${postFile.url}}"
                                                                                 th:text="${postFile.name}"></a></label>
@@ -68,13 +68,13 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="formFileMultiple">Upload Files</label>
-            <input class="form-control" id="formFileMultiple" multiple name="files" th:disabled="${#authentication.principal.id ne post.user.id}" type="file">
+            <input class="form-control" id="formFileMultiple" multiple name="uploadFiles" th:disabled="${#authentication.principal.id ne post.userId}" type="file">
         </div>
-        <button class="btn btn-primary" th:unless="${#authentication.principal.id ne post.user.id}" type="submit">Edit
+        <button class="btn btn-primary" th:unless="${#authentication.principal.id ne post.userId}" type="submit">Edit
         </button>
     </form>
     <form method="post" th:action="@{'/post/' + ${post.id} + '/delete'}">
-        <button class="btn btn-danger" th:unless="${#authentication.principal.id ne post.user.id}" type="submit">
+        <button class="btn btn-danger" th:unless="${#authentication.principal.id ne post.userId}" type="submit">
             Delete
         </button>
     </form>

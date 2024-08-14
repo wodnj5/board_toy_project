@@ -1,6 +1,7 @@
 package com.wodnj5.board.service;
 
 import com.wodnj5.board.domain.User;
+import com.wodnj5.board.dto.request.UserRequestDto;
 import com.wodnj5.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,10 +16,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Long signup(String email, String password, String nickname) {
-        validateDuplicateEmail(email);
-        validateDuplicateNickname(nickname);
-        User user = new User(email, bCryptPasswordEncoder.encode(password), nickname, "ROLE_USER");
+    public Long signup(UserRequestDto dto) {
+        validateDuplicateEmail(dto.getEmail());
+        validateDuplicateNickname(dto.getNickname());
+        User user = dto.toEntity(bCryptPasswordEncoder);
         userRepository.save(user);
         return user.getId();
     }
