@@ -1,7 +1,8 @@
 package com.wodnj5.board.controller;
 
-import com.wodnj5.board.domain.UserDetailsImpl;
-import com.wodnj5.board.dto.PostDto;
+import com.wodnj5.board.domain.CustomUserDetails;
+import com.wodnj5.board.dto.request.PostRequestDto;
+import com.wodnj5.board.dto.response.PostResponseDto;
 import com.wodnj5.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +20,10 @@ public class PostController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("posts", postService.findAll());
+        model.addAttribute("posts", postService.findAll()
+                .stream()
+                .map(PostResponseDto::fromEntity)
+                .toList());
         return "home";
     }
 
@@ -29,20 +33,20 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public String upload(PostDto dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.upload(userDetails.getUser(), dto.getTitle(), dto.getContents(), dto.getFiles());
+    public String upload(@AuthenticationPrincipal CustomUserDetails userDetails, PostRequestDto dto) {
+        postService.upload(userDetails.getUser(), dto);
         return "redirect:/";
     }
 
     @GetMapping("/post/{id}")
     public String get(@PathVariable Long id, Model model) {
-        model.addAttribute("post", postService.findOne(id));
+        model.addAttribute("post", PostResponseDto.fromEntity(postService.findOne(id)));
         return "post";
     }
 
     @PostMapping("/post/{id}/edit")
-    public String edit(@PathVariable Long id, PostDto dto) {
-        return "redirect:/post/" + postService.edit(id, dto.getTitle(), dto.getContents(), dto.getFileIds(), dto.getFiles());
+    public String edit(@PathVariable Long id, PostRequestDto dto) {
+        return "redirect:/post/" + postService.edit(id, dto);
     }
 
     @PostMapping("/post/{id}/delete")

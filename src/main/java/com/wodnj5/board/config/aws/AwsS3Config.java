@@ -1,4 +1,4 @@
-package com.wodnj5.board.config;
+package com.wodnj5.board.config.aws;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
