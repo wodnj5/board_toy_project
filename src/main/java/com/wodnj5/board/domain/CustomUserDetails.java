@@ -1,5 +1,6 @@
 package com.wodnj5.board.domain;
 
+import com.wodnj5.board.domain.entity.UserEntity;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
@@ -12,29 +13,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final UserEntity userEntity;
 
     public long getId() {
-        return user.getId();
+        return userEntity.getId();
     }
 
     public String getNickname() {
-        return user.getNickname();
+        return userEntity.getNickname();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole()));
+        return List.of(new SimpleGrantedAuthority(userEntity.getRole()));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return userEntity.getUsername();
     }
 
     @Override

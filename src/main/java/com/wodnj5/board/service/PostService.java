@@ -1,17 +1,22 @@
 package com.wodnj5.board.service;
 
-import com.wodnj5.board.domain.Post;
-import com.wodnj5.board.domain.PostFile;
-import com.wodnj5.board.domain.User;
-import com.wodnj5.board.dto.request.PostRequestDto;
-import com.wodnj5.board.repository.AwsS3Bucket;
-import com.wodnj5.board.repository.PostFileRepository;
+import com.wodnj5.board.domain.entity.PostEntity;
+import com.wodnj5.board.domain.entity.PostFile;
+import com.wodnj5.board.domain.entity.PostFileEntity;
+import com.wodnj5.board.domain.entity.UserEntity;
+import com.wodnj5.board.dto.request.post.PostCreateRequest;
+import com.wodnj5.board.dto.request.post.PostModifyRequest;
+import com.wodnj5.board.repository.AmazonS3Bucket;
 import com.wodnj5.board.repository.PostRepository;
+import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -19,49 +24,54 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final PostFileRepository postFileRepository;
-    private final AwsS3Bucket awsS3Bucket;
+    private final AmazonS3Bucket amazonS3Bucket;
 
-    public Long upload(User user, PostRequestDto dto) {
-        Post post = dto.toPostEntity(user);
-        List<PostFile> postFiles = dto.toPostFileEntities(post, awsS3Bucket);
+    public void create(UserEntity userEntity, PostCreateRequest dto) {
+        PostEntity post = new PostEntity(userEntity, dto.getTitle(), dto.getContents());
+        List<PostFileEntity> postFileEntities = dto.getMultipartFiles().stream()
+                .filter(file -> !Objects.requireNonNull(file).isEmpty())
+                .map(file -> new PostFileEntity(post, createFile(file))
+        ).toList();
+        postFileEntities.forEach(post::addPostFile);
         postRepository.save(post);
-        postFileRepository.saveAll(postFiles);
-        return post.getId();
+    }
+
+    private PostFile createFile(MultipartFile multipartFile) {
+        String fileKey = "post" + File.separator + UUID.randomUUID();
+        return new PostFile(multipartFile.getOriginalFilename(), amazonS3Bucket.uploadObject(fileKey, multipartFile), fileKey);
     }
 
     @Transactional(readOnly = true)
-    public List<Post> findAll() {
+    public List<PostEntity> findAll() {
         return postRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Post findOne(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> new IllegalStateException("post is not exist"));
+    public PostEntity findOne(Long id) {
+        return postRepository.findById(id).orElseThrow(() -> new IllegalStateException("게시글이 존재하지 않습니다."));
     }
 
-    public Long edit(Long id, PostRequestDto dto) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalStateException("post is not exist"));
+    public Long edit(Long id, PostModifyRequest dto) {
+        PostEntity post = postRepository.findById(id).orElseThrow(() -> new IllegalStateException("게시글이 존재하지 않습니다."));
         // 삭제해야하는 ID가 있다면 S3와 DB에서 파일 삭제
-        List<Long> deleteFileIds = dto.getDeleteFileIds();
-        if(Optional.ofNullable(deleteFileIds).isPresent()) {
-            List<PostFile> deleteFiles = postFileRepository.findAllById(deleteFileIds);
-            deleteFiles.forEach(awsS3Bucket::deleteObject);
-            postFileRepository.deleteAll(deleteFiles);
+        List<Long> uploadedFileIds = dto.getUploadedFileIds();
+        if(Optional.ofNullable(uploadedFileIds).isPresent()) {
+            List<PostFileEntity> deletedPostFiles = post.removeById(uploadedFileIds);
+            deletedPostFiles.forEach(amazonS3Bucket::deleteObject);
         }
-        // 내용 수정 후
         post.edit(dto.getTitle(), dto.getContents());
         // 새로운 파일 업로드
-        List<PostFile> postFiles = dto.toPostFileEntities(post, awsS3Bucket);
-        postFileRepository.saveAll(postFiles);
+        List<PostFileEntity> postFileEntities = dto.getMultipartFiles().stream()
+                .map(file -> new PostFileEntity(post, createFile(file))
+        ).toList();
+        postFileEntities.forEach(post::addPostFile);
         return post.getId();
     }
 
-    public void delete(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalStateException("post is not exist"));
-        List<PostFile> postFiles = post.getPostFiles();
-        postFiles.forEach(awsS3Bucket::deleteObject);
-        postFileRepository.deleteAll(postFiles);
+    public void remove(Long postId) {
+        PostEntity post = postRepository.findById(postId).orElseThrow(() -> new IllegalStateException("게시글이 존재하지 않습니다."));
+        List<PostFileEntity> postFileEntities = post.getPostFiles();
+        postFileEntities.forEach(amazonS3Bucket::deleteObject);
         postRepository.delete(post);
     }
 }

@@ -1,10 +1,30 @@
 spring:
+  application:
+    name: board
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/board
+    username: sa
+    password: 1234
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
   jpa:
     hibernate:
       ddl-auto: create
-logging:
-  level:
-    org:
+      default-batch-fetch-size: 100
+    properties:
       hibernate:
-        SQL: debug
-        type: trace
+        #show_sql: true
+        format_sql: true
+cloud:
+  aws:
+    region:
+      static: ap-southeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket:

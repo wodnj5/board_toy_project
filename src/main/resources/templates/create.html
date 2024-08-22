@@ -29,7 +29,7 @@
                     <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
                        href="#" role="button" th:text="${#authentication.principal.nickname}"></a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{/post}">Upload New Post</a></li>
+                        <li><a class="dropdown-item" th:href="@{/post}">Create New Post</a></li>
                         <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
                     </ul>
                 </li>
@@ -42,41 +42,21 @@
     </div>
 </nav>
 <div class="mx-auto p-2" style="width: 1000px;">
-    <form enctype="multipart/form-data" method="post" th:action="@{'/post/' + ${post.id} + '/edit'}">
+    <form enctype="multipart/form-data" method="post" th:action="@{'/post'}">
         <div class="mb-3">
             <label class="form-label" for="exampleFormControlInput1">Title</label>
-            <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="Title"
-                   th:disabled="${#authentication.principal.id ne post.userId}" th:value="${post.title}"
-                   type="text">
+            <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="Title" type="text">
         </div>
         <div class="mb-3">
             <label class="form-label" for="exampleFormControlTextarea1">Contents</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1"
-                      name="contents" placeholder="Contents" rows="3"
-                      th:disabled="${#authentication.principal.id ne post.userId}"
-                      th:text="${post.contents}"></textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="formFileMultiple">Uploaded Files</label>
-            <div class="form-check" th:each="postFile : ${post.postFiles}">
-                <input class="form-check-input" id="flexSwitchCheckDefault" name="deleteFileIds" role="switch"
-                       th:disabled="${#authentication.principal.id ne post.userId}" th:value="${postFile.id}"
-                       type="checkbox">
-                <label class="form-check-label" for="flexSwitchCheckDefault"><a th:href="@{${postFile.url}}"
-                                                                                th:text="${postFile.name}"></a></label>
-            </div>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="contents" placeholder="Contents"
+                      rows="3"></textarea>
         </div>
         <div class="mb-3">
             <label class="form-label" for="formFileMultiple">Upload Files</label>
-            <input class="form-control" id="formFileMultiple" multiple name="uploadFiles" th:disabled="${#authentication.principal.id ne post.userId}" type="file">
+            <input class="form-control" id="formFileMultiple" multiple name="multipartFiles" type="file">
         </div>
-        <button class="btn btn-primary" th:unless="${#authentication.principal.id ne post.userId}" type="submit">Edit
-        </button>
-    </form>
-    <form method="post" th:action="@{'/post/' + ${post.id} + '/delete'}">
-        <button class="btn btn-danger" th:unless="${#authentication.principal.id ne post.userId}" type="submit">
-            Delete
-        </button>
+        <button class="btn btn-primary" type="submit">Create</button>
     </form>
 </div>
 <script crossorigin="anonymous" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

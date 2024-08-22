@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -17,17 +18,13 @@ public class WebSecurityConfig{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/login", "/home", "/signup", "/error").permitAll()
-                        .requestMatchers("/css/**","/js/**").permitAll()
-                        .anyRequest().hasRole("USER"))
+                        //.requestMatchers("/css/**","/js/**").permitAll()
+                        .anyRequest().permitAll())
                 .formLogin(formLoginConfigurer -> formLoginConfigurer
                         .loginPage("/login")
-                        .failureHandler(new CustomAuthenticationFailureHandler())
-                        .defaultSuccessUrl("/")
+                        //.failureHandler(new CustomAuthenticationFailureHandler())
                         .permitAll())
-                .logout(logoutConfigurer -> logoutConfigurer
-                        .logoutSuccessUrl("/")
-                        .permitAll())
+                .logout(LogoutConfigurer::permitAll)
                 .build();
     }
 

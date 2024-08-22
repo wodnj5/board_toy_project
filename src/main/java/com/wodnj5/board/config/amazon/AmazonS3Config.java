@@ -1,4 +1,4 @@
-package com.wodnj5.board.config.aws;
+package com.wodnj5.board.config.amazon;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AwsS3Config {
+public class AmazonS3Config {
 
     @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
@@ -22,7 +22,7 @@ public class AwsS3Config {
     private String region;
 
     @Bean
-    public AmazonS3 amazonS3config() {
+    public AmazonS3 amazonS3() {
         AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonS3ClientBuilder.standard()
                 .withRegion(region)

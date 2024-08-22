@@ -5,13 +5,18 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:tcp://localhost/~/board
     username: sa
-    password:
+    password: 1234
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
   jpa:
     hibernate:
       ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
   servlet:
     multipart:
       enabled: true
@@ -29,9 +34,3 @@ cloud:
       secretKey:
     s3:
       bucket:
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-        type: trace

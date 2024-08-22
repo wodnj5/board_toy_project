@@ -1,16 +1,14 @@
-package com.wodnj5.board.domain;
+package com.wodnj5.board.domain.entity;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,22 +16,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "post_files")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-public class PostFile {
+public class PostFileEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Post post;
-    @Column(nullable = false)
-    private String name;
-    @Column(nullable = false)
-    private String s3Key;
-    @Column(nullable = false)
-    private String url;
-    private LocalDateTime uploadedAt;
+    private PostEntity post;
+    @Embedded
+    private PostFile postFile;
+
+    public PostFileEntity(PostEntity post, PostFile postFile) {
+        this.post = post;
+        this.postFile = postFile;
+    }
 
 }

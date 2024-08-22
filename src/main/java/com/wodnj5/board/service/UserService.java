@@ -1,7 +1,7 @@
 package com.wodnj5.board.service;
 
-import com.wodnj5.board.domain.User;
-import com.wodnj5.board.dto.request.UserRequestDto;
+import com.wodnj5.board.domain.entity.UserEntity;
+import com.wodnj5.board.dto.request.user.UserSignupRequest;
 import com.wodnj5.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,19 +16,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Long signup(UserRequestDto dto) {
-        validateDuplicateEmail(dto.getEmail());
-        validateDuplicateNickname(dto.getNickname());
-        User user = dto.toEntity(bCryptPasswordEncoder);
-        userRepository.save(user);
-        return user.getId();
-    }
-
-    private void validateDuplicateEmail(String email) {
-        if(userRepository.findByEmail(email).isPresent()) throw new IllegalStateException("email is already used");
-    }
-
-    private void validateDuplicateNickname(String nickname) {
-        if(userRepository.findByNickname(nickname).isPresent()) throw new IllegalStateException("email is already used");
+    public void signup(UserSignupRequest dto) {
+        UserEntity userEntity = new UserEntity(dto.getUsername(),
+                bCryptPasswordEncoder.encode(dto.getPassword()),
+                dto.getNickname());
+        userRepository.save(userEntity);
     }
 }
