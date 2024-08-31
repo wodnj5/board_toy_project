@@ -28,9 +28,8 @@ public class PostEntity extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
-    @Column(nullable = false)
     private String title;
-    @Column(columnDefinition = "text", nullable = false)
+    @Column(columnDefinition = "text")
     private String contents;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostFileEntity> postFiles = new ArrayList<>();
@@ -41,7 +40,7 @@ public class PostEntity extends BaseTimeEntity {
         this.contents = contents;
     }
 
-    public void edit(String title, String contents) {
+    public void modify(String title, String contents) {
         this.title = title;
         this.contents = contents;
     }

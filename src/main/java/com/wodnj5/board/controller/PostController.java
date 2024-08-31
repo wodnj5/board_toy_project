@@ -6,8 +6,9 @@ import com.wodnj5.board.dto.request.post.PostCreateRequest;
 import com.wodnj5.board.dto.request.post.PostModifyRequest;
 import com.wodnj5.board.dto.response.post.PostResponse;
 import com.wodnj5.board.service.PostService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +23,12 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String board(Model model) {
-        List<PostEntity> posts = postService.findAll();
-        model.addAttribute("posts", posts.stream()
+    public String board(Pageable pageable, Model model) {
+        Page<PostEntity> posts = postService.findAll(pageable);
+        model.addAttribute("posts", posts
                 .map(PostResponse::new)
                 .toList());
-        return "board";
+        return "home";
     }
 
     @PostMapping("/post")
@@ -44,7 +45,8 @@ public class PostController {
 
     @PostMapping("/post/{id}/modify")
     public String modify(@PathVariable Long id, PostModifyRequest dto) {
-        return "redirect:/post/" + postService.edit(id, dto);
+        postService.modify(id, dto);
+        return "redirect:/post/" + id;
     }
 
     @PostMapping("/post/{id}/remove")

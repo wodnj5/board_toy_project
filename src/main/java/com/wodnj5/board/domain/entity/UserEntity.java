@@ -28,4 +28,9 @@ public class UserEntity extends BaseTimeEntity {
         this.nickname = nickname;
         role = "ROLE_USER";
     }
+
+    public void modify(String password, String nickname) {
+        this.password = password;
+        this.nickname = nickname;
+    }
 }
