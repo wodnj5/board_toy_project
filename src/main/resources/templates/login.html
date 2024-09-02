@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
-
 <head th:replace="fragments/header :: header">
     <title>Title</title>
 </head>
@@ -22,7 +20,7 @@
                 <input class="form-control" id="inputPassword3" name="password" type="password">
             </div>
         </div>
-        <div class="alert alert-danger" role="alert" th:if="${param.errorMessage ne null}" th:text="${param.errorMessage}"></div>
+        <div class="alert alert-danger" role="alert" th:if="${error ne null}" th:text="${error.message}"></div>
         <button class="btn btn-primary" type="submit">로그인</button>
         <a class="btn btn-secondary" th:href="@{/signup}">회원가입</a>
     </form>

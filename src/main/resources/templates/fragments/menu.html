@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav class="navbar navbar-expand-lg bg-body-tertiary" th:fragment="menu">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/}">게시판</a>
@@ -14,12 +13,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/post}">글 작성</a>
                 </li>
-                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <li class="nav-item" th:if="${session.user eq null}">
                     <a class="nav-link active" th:href="@{/login}">로그인</a>
                 </li>
-                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                <li class="nav-item dropdown" th:if="${session.user ne null}">
                     <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
-                       href="#" role="button" th:text="${#authentication.principal.nickname}"></a>
+                       href="#" role="button" th:text="${session.user.nickname}"></a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" th:href="@{/user}">회원정보 수정</a></li>
                         <li><a class="dropdown-item" th:href="@{/logout}">로그아웃</a></li>

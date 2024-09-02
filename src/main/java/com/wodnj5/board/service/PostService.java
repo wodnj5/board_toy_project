@@ -6,6 +6,7 @@ import com.wodnj5.board.domain.entity.PostFileEntity;
 import com.wodnj5.board.domain.entity.UserEntity;
 import com.wodnj5.board.dto.request.post.PostCreateRequest;
 import com.wodnj5.board.dto.request.post.PostModifyRequest;
+import com.wodnj5.board.exception.PostNotFoundException;
 import com.wodnj5.board.repository.AmazonS3Bucket;
 import com.wodnj5.board.repository.PostRepository;
 import java.io.File;
@@ -40,7 +41,7 @@ public class PostService {
     }
 
     public PostEntity findOne(Long id) {
-        return postRepository.findById(id).orElseThrow(IllegalStateException::new);
+        return postRepository.findById(id).orElseThrow(PostNotFoundException::new);
     }
 
     private void uploadFiles(PostEntity post, List<MultipartFile> multipartFiles) {
@@ -58,7 +59,7 @@ public class PostService {
 
     @Transactional
     public void modify(Long id, PostModifyRequest dto) {
-        PostEntity post = postRepository.findById(id).orElseThrow(IllegalStateException::new);
+        PostEntity post = postRepository.findById(id).orElseThrow(PostNotFoundException::new);
         // 삭제해야하는 ID가 있다면 S3와 DB에서 파일 삭제
         List<Long> uploadedFileIds = dto.getUploadedFileIds();
         if(Optional.ofNullable(uploadedFileIds).isPresent()) {
@@ -72,7 +73,7 @@ public class PostService {
 
     @Transactional
     public void remove(Long postId) {
-        PostEntity post = postRepository.findById(postId).orElseThrow(IllegalStateException::new);
+        PostEntity post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         List<PostFileEntity> postFileEntities = post.getPostFiles();
         postFileEntities.forEach(amazonS3Bucket::deleteObject);
         postRepository.delete(post);

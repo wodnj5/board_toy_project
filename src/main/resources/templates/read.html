@@ -12,32 +12,31 @@
         <div class="mb-3">
             <label class="form-label" for="exampleFormControlInput1">제목</label>
             <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="제목"
-                   th:disabled="${#authentication.principal.id ne post.userId}" th:value="${post.title}"
+                   th:disabled="${session.user.id ne post.userId}" th:value="${post.title}"
                    type="text">
         </div>
         <div class="mb-3">
             <label class="form-label" for="exampleFormControlTextarea1">내용</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" name="contents" placeholder="내용" rows="3"
-                      th:disabled="${#authentication.principal.id ne post.userId}" th:text="${post.contents}"></textarea>
+                      th:disabled="${session.user ne post.userId}" th:text="${post.contents}"></textarea>
         </div>
         <div class="mb-3">
             <label class="form-label" for="formFileMultiple">업로드 된 파일</label>
             <div class="form-check" th:each="postFile: ${post.postFiles}">
                 <input class="form-check-input" id="flexSwitchCheckDefault" name="uploadedFileIds" role="switch"
-                       th:disabled="${#authentication.principal.id ne post.userId}" th:value="${postFile.id}"
+                       th:disabled="${session.user ne post.userId}" th:value="${postFile.id}"
                        type="checkbox">
-                <label class="form-check-label" for="flexSwitchCheckDefault"><a th:href="@{${postFile.path}}"
-                                                                                th:text="${postFile.originalFilename}"></a></label>
+                <label class="form-check-label" for="flexSwitchCheckDefault"><a th:href="@{${postFile.path}}" th:text="${postFile.originalFilename}"></a></label>
             </div>
         </div>
         <div class="mb-3">
             <label class="form-label" for="formFileMultiple">파일 업로드</label>
-            <input class="form-control" id="formFileMultiple" multiple name="multipartFiles" th:disabled="${#authentication.principal.id ne post.userId}" type="file">
+            <input class="form-control" id="formFileMultiple" multiple name="multipartFiles" th:disabled="${session.user.id ne post.userId}" type="file">
         </div>
-        <button class="btn btn-primary" th:unless="${#authentication.principal.id ne post.userId}" type="submit">수정</button>
+        <button class="btn btn-primary" th:unless="${session.user.id ne post.userId}" type="submit">수정</button>
     </form>
     <form method="post" th:action="@{'/post/' + ${post.id} + '/remove'}">
-        <button class="btn btn-danger" th:unless="${#authentication.principal.id ne post.userId}" type="submit">삭제</button>
+        <button class="btn btn-danger" th:unless="${session.user.id ne post.userId}" type="submit">삭제</button>
     </form>
 </div>
 <script th:replace="fragments/footer :: footer"></script>
