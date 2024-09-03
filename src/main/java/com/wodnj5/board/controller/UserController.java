@@ -7,6 +7,7 @@ import com.wodnj5.board.dto.request.user.UserSignupRequest;
 import com.wodnj5.board.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,25 +39,15 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(HttpServletRequest request, Model model, UserLoginRequest dto) {
-        UserEntity user;
-        try {
-            user = userService.login(dto);
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-        } catch (IllegalStateException e) {
-            model.addAttribute("error", e);
-            return "redirect:/login";
-        }
+        UserEntity user = userService.login(dto);
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
         return "redirect:/";
     }
 
     @PostMapping("/signup")
     public String signup(UserSignupRequest dto) {
-        try {
-            userService.signup(dto);
-        } catch (IllegalStateException e) {
-            return "redirect:/signup";
-        }
+        userService.signup(dto);
         return "redirect:/";
     }
 
@@ -68,8 +59,8 @@ public class UserController {
     @PostMapping("/user/modify")
     public String modify(HttpServletRequest request, UserModifyRequest dto) {
         HttpSession session = request.getSession();
-        UserEntity user = (UserEntity) session.getAttribute("user");
-        userService.modify(user.getId(), dto);
+        Optional<UserEntity> user = Optional.ofNullable((UserEntity) session.getAttribute("user"));
+        user.ifPresent(u -> userService.modify(u.getId(), dto));
         return "redirect:/user";
     }
 }

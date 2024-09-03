@@ -21,7 +21,7 @@ public class UserService {
         UserEntity user = userRepository.findByUsername(dto.getUsername())
                 .orElseThrow(UserNotFoundException::new);
 
-        if(!dto.getPassword().equals(user.getPassword())) {
+        if(!user.checkPassword(dto.getPassword())) {
             throw new IllegalStateException();
         }
         return user;
@@ -29,9 +29,7 @@ public class UserService {
 
     @Transactional
     public void signup(UserSignupRequest dto) {
-        UserEntity userEntity = new UserEntity(dto.getUsername(),
-                dto.getPassword(),
-                dto.getNickname());
+        UserEntity userEntity = new UserEntity(dto.getUsername(), dto.getPassword(), dto.getNickname());
         userRepository.save(userEntity);
     }
 

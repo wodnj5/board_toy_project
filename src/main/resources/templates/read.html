@@ -18,7 +18,7 @@
         <div class="mb-3">
             <label class="form-label" for="exampleFormControlTextarea1">내용</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" name="contents" placeholder="내용" rows="3"
-                      th:disabled="${session.user ne post.userId}" th:text="${post.contents}"></textarea>
+                      th:disabled="${session.user.id ne post.userId}" th:text="${post.contents}"></textarea>
         </div>
         <div class="mb-3">
             <label class="form-label" for="formFileMultiple">업로드 된 파일</label>

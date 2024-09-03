@@ -33,4 +33,8 @@ public class UserEntity extends BaseTimeEntity {
         this.password = password;
         this.nickname = nickname;
     }
+
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
 }

@@ -6,6 +6,7 @@ import com.wodnj5.board.domain.entity.PostFileEntity;
 import com.wodnj5.board.domain.entity.UserEntity;
 import com.wodnj5.board.dto.request.post.PostCreateRequest;
 import com.wodnj5.board.dto.request.post.PostModifyRequest;
+import com.wodnj5.board.dto.request.post.PostSearchRequest;
 import com.wodnj5.board.exception.PostNotFoundException;
 import com.wodnj5.board.repository.AmazonS3Bucket;
 import com.wodnj5.board.repository.PostRepository;
@@ -77,5 +78,9 @@ public class PostService {
         List<PostFileEntity> postFileEntities = post.getPostFiles();
         postFileEntities.forEach(amazonS3Bucket::deleteObject);
         postRepository.delete(post);
+    }
+
+    public Page<PostEntity> search(PostSearchRequest dto, Pageable pageable) {
+        return postRepository.search(dto.getSearch(), pageable);
     }
 }
