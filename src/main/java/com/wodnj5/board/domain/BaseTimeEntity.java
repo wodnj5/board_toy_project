@@ -1,4 +1,4 @@
-package com.wodnj5.board.domain.entity;
+package com.wodnj5.board.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

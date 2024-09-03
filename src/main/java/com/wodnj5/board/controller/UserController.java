@@ -1,6 +1,6 @@
 package com.wodnj5.board.controller;
 
-import com.wodnj5.board.domain.entity.UserEntity;
+import com.wodnj5.board.domain.UserEntity;
 import com.wodnj5.board.dto.request.user.UserLoginRequest;
 import com.wodnj5.board.dto.request.user.UserModifyRequest;
 import com.wodnj5.board.dto.request.user.UserSignupRequest;
@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         session.invalidate();
         return "redirect:/";
     }
@@ -58,7 +58,7 @@ public class UserController {
 
     @PostMapping("/user/modify")
     public String modify(HttpServletRequest request, UserModifyRequest dto) {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         Optional<UserEntity> user = Optional.ofNullable((UserEntity) session.getAttribute("user"));
         user.ifPresent(u -> userService.modify(u.getId(), dto));
         return "redirect:/user";

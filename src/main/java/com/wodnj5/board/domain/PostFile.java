@@ -1,4 +1,4 @@
-package com.wodnj5.board.domain.entity;
+package com.wodnj5.board.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

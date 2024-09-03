@@ -1,6 +1,6 @@
-package com.wodnj5.board.repository;
+package com.wodnj5.board.repository.post;
 
-import com.wodnj5.board.domain.entity.PostEntity;
+import com.wodnj5.board.domain.PostEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

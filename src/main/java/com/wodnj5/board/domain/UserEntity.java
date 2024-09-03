@@ -1,6 +1,8 @@
-package com.wodnj5.board.domain.entity;
+package com.wodnj5.board.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -20,13 +22,14 @@ public class UserEntity extends BaseTimeEntity {
     private String username;
     private String password;
     private String nickname;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public UserEntity(String username, String password, String nickname) {
+    public UserEntity(String username, String password, String nickname, Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        role = "ROLE_USER";
+        this.role = role;
     }
 
     public void modify(String password, String nickname) {

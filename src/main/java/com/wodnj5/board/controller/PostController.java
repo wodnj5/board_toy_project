@@ -1,6 +1,6 @@
 package com.wodnj5.board.controller;
 
-import com.wodnj5.board.domain.entity.UserEntity;
+import com.wodnj5.board.domain.UserEntity;
 import com.wodnj5.board.dto.request.post.PostCreateRequest;
 import com.wodnj5.board.dto.request.post.PostModifyRequest;
 import com.wodnj5.board.dto.request.post.PostSearchRequest;
@@ -35,7 +35,7 @@ public class PostController {
 
     @PostMapping("/post")
     public String create(HttpServletRequest request, PostCreateRequest dto) {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         UserEntity user = (UserEntity) session.getAttribute("user");
         postService.create(user, dto);
         return "redirect:/";

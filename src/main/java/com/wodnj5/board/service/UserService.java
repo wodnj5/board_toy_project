@@ -1,11 +1,12 @@
 package com.wodnj5.board.service;
 
-import com.wodnj5.board.domain.entity.UserEntity;
+import com.wodnj5.board.domain.Role;
+import com.wodnj5.board.domain.UserEntity;
 import com.wodnj5.board.dto.request.user.UserLoginRequest;
 import com.wodnj5.board.dto.request.user.UserModifyRequest;
 import com.wodnj5.board.dto.request.user.UserSignupRequest;
 import com.wodnj5.board.exception.UserNotFoundException;
-import com.wodnj5.board.repository.UserRepository;
+import com.wodnj5.board.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class UserService {
 
     @Transactional
     public void signup(UserSignupRequest dto) {
-        UserEntity userEntity = new UserEntity(dto.getUsername(), dto.getPassword(), dto.getNickname());
+        UserEntity userEntity = new UserEntity(dto.getUsername(), dto.getPassword(), dto.getNickname(), Role.ROLE_USER);
         userRepository.save(userEntity);
     }
 

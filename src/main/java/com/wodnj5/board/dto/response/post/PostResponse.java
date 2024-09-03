@@ -1,6 +1,6 @@
 package com.wodnj5.board.dto.response.post;
 
-import com.wodnj5.board.domain.entity.PostEntity;
+import com.wodnj5.board.domain.PostEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;

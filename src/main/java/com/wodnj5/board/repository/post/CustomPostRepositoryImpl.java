@@ -1,12 +1,12 @@
-package com.wodnj5.board.repository;
+package com.wodnj5.board.repository.post;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.wodnj5.board.domain.entity.PostEntity;
-import com.wodnj5.board.domain.entity.QPostEntity;
+import com.wodnj5.board.domain.PostEntity;
+import com.wodnj5.board.domain.QPostEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CustomPostRepositoryImpl implements CustomPostRepository {
 
-    @PersistenceContext
+    @Autowired
     private final EntityManager em;
 
     @Override

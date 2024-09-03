@@ -1,19 +1,30 @@
-# CRUD 게시판
+# 간단한 CRUD 게시판
+
+## 학습한 강의
+
+- [김영한의 스프링 부트와 JPA 실무 완전 정복 로드맵](https://www.inflearn.com/roadmaps/149) 
 
 ## 주요 기능
 
-- 로그인/로그아웃
+- 세션을 이용한 로그인/로그아웃
+- 로그인한 사용자 정보 수정
 - 글 작성/수정/삭제
 - 파일 업로드/삭제
 
 ## 프레임워크
 
-<img src="https://img.shields.io/badge/spring-20232a.svg?style=for-the-badge&logo=spring&logoColor=6DB33F" /><img src="https://img.shields.io/badge/springboot-20232a.svg?style=for-the-badge&logo=springboot&logoColor=6DB33F" /><img src="https://img.shields.io/badge/bootstrap-20232a.svg?style=for-the-badge&logo=bootstrap&logoColor=7952B3" />
+- Spring
+- Spring Boot
+- JPA
+- Querydsl
+- Bootstrap
 
-## 파일 저장소 
+## DB / 저장소
 
-<img src="https://img.shields.io/badge/aws s3 bucket-20232a.svg?style=for-the-badge&logo=amazons3&logoColor=569A31" />
+- H2
+- Amazon S3
 
 ## 개발 환경
 
-<img src="https://img.shields.io/badge/intellij idea community-20232a.svg?style=for-the-badge&logo=intellijidea&logoColor=000000" />
+- Mac OS
+- IntelliJ IDEA

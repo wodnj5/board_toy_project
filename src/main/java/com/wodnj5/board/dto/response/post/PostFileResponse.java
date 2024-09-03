@@ -1,6 +1,6 @@
 package com.wodnj5.board.dto.response.post;
 
-import com.wodnj5.board.domain.entity.PostFileEntity;
+import com.wodnj5.board.domain.PostFileEntity;
 import lombok.Data;
 
 @Data

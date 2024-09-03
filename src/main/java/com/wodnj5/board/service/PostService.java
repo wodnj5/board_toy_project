@@ -1,15 +1,15 @@
 package com.wodnj5.board.service;
 
-import com.wodnj5.board.domain.entity.PostEntity;
-import com.wodnj5.board.domain.entity.PostFile;
-import com.wodnj5.board.domain.entity.PostFileEntity;
-import com.wodnj5.board.domain.entity.UserEntity;
+import com.wodnj5.board.domain.PostEntity;
+import com.wodnj5.board.domain.PostFile;
+import com.wodnj5.board.domain.PostFileEntity;
+import com.wodnj5.board.domain.UserEntity;
 import com.wodnj5.board.dto.request.post.PostCreateRequest;
 import com.wodnj5.board.dto.request.post.PostModifyRequest;
 import com.wodnj5.board.dto.request.post.PostSearchRequest;
 import com.wodnj5.board.exception.PostNotFoundException;
 import com.wodnj5.board.repository.AmazonS3Bucket;
-import com.wodnj5.board.repository.PostRepository;
+import com.wodnj5.board.repository.post.PostRepository;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;

@@ -1,9 +1,9 @@
 package com.wodnj5.board.controller.api;
 
-import com.wodnj5.board.domain.entity.PostEntity;
+import com.wodnj5.board.domain.PostEntity;
 import com.wodnj5.board.dto.request.post.PostSearchRequest;
 import com.wodnj5.board.dto.response.post.PostResponse;
-import com.wodnj5.board.repository.PostRepository;
+import com.wodnj5.board.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

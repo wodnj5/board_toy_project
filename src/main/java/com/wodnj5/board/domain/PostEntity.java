@@ -1,4 +1,4 @@
-package com.wodnj5.board.domain.entity;
+package com.wodnj5.board.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -46,11 +46,11 @@ public class PostEntity extends BaseTimeEntity {
     }
 
     public List<PostFileEntity> removeById(List<Long> uploadedPostFileIds) {
-        List<PostFileEntity> uploadedPostFile = postFiles.stream()
+        List<PostFileEntity> uploadedPostFiles = postFiles.stream()
                 .filter(file -> uploadedPostFileIds.contains(file.getId()))
                 .toList();
-        uploadedPostFile.forEach(postFiles::remove);
-        return uploadedPostFile;
+        uploadedPostFiles.forEach(postFiles::remove);
+        return uploadedPostFiles;
     }
 
     public void addPostFile(PostFileEntity postFileEntity) {
