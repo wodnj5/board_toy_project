@@ -29,7 +29,7 @@
                 <div class="form-check" th:each="postFile: ${post.postFiles}">
                     <input class="form-check-input" id="flexSwitchCheckDefault" name="uploadedFileIds"
                            role="switch"
-                           th:disabled="${session.user eq null or session.user ne post.userId}"
+                           th:disabled="${session.user eq null or session.user.id ne post.userId}"
                            th:value="${postFile.id}"
                            type="checkbox">
                     <label class="form-check-label" for="flexSwitchCheckDefault"><a

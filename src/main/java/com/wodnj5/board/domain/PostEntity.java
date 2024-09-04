@@ -31,6 +31,7 @@ public class PostEntity extends BaseTimeEntity {
     private String title;
     @Column(columnDefinition = "text")
     private String contents;
+    private Long views;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostFileEntity> postFiles = new ArrayList<>();
 
@@ -38,6 +39,7 @@ public class PostEntity extends BaseTimeEntity {
         this.user = user;
         this.title = title;
         this.contents = contents;
+        views = 0L;
     }
 
     public void modify(String title, String contents) {
@@ -55,6 +57,10 @@ public class PostEntity extends BaseTimeEntity {
 
     public void addPostFile(PostFileEntity postFileEntity) {
         postFiles.add(postFileEntity);
+    }
+
+    public void increaseViews() {
+        views++;
     }
 
 }

@@ -27,7 +27,7 @@ public class PostController {
     @GetMapping("/")
     public String search(PostSearchRequest dto, @PageableDefault Pageable pageable, Model model) {
         Page<PostResponse> result = postService.search(dto, pageable).map(PostResponse::new);
-        int start = Math.max(0, (result.getNumber() / 5 * 5));
+        int start = result.getNumber() / 5 * 5;
         int end = Math.min(start + 5, result.getTotalPages());
         model.addAttribute("startPage", start);
         model.addAttribute("endPage", end);
@@ -36,7 +36,13 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public String post() {
+    public String post(HttpServletRequest request) {
+        try {
+            HttpSession session = request.getSession(false);
+            session.getAttribute("user");
+        } catch (NullPointerException e) {
+            return "redirect:/login";
+        }
         return "post";
     }
 
@@ -49,7 +55,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public String read(@PathVariable Long id, Model model) {
+    public String view(@PathVariable Long id, Model model) {
         model.addAttribute("post", new PostResponse(postService.view(id)));
         return "view_post";
     }
@@ -62,9 +68,13 @@ public class PostController {
 
     @GetMapping("/post/{id}/delete")
     public String delete(HttpServletRequest request, @PathVariable Long id) {
-        HttpSession session = request.getSession(false);
-        UserEntity user = (UserEntity) session.getAttribute("user");
-        postService.delete(user, id);
+        try {
+            HttpSession session = request.getSession(false);
+            UserEntity user = (UserEntity) session.getAttribute("user");
+            postService.delete(user, id);
+        } catch (NullPointerException e) {
+            return "redirect:/login";
+        }
         return "redirect:/";
     }
 

@@ -41,8 +41,11 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    @Transactional
     public PostEntity view(Long id) {
-        return postRepository.findById(id).orElseThrow(PostNotFoundException::new);
+        PostEntity post =  postRepository.findById(id).orElseThrow(PostNotFoundException::new);
+        post.increaseViews();
+        return post;
     }
 
     private void uploadFiles(PostEntity post, List<MultipartFile> multipartFiles) {

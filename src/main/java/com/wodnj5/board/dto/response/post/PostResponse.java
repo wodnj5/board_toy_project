@@ -14,6 +14,7 @@ public class PostResponse {
     private String title;
     private String contents;
     private LocalDateTime createdDate;
+    private Long views;
     private List<PostFileResponse> postFiles;
 
     public PostResponse(PostEntity entity) {
@@ -23,6 +24,7 @@ public class PostResponse {
         title = entity.getTitle();
         contents = entity.getContents();
         createdDate = entity.getCreatedDate();
+        views = entity.getViews();
         postFiles = entity.getPostFiles().stream()
                 .map(PostFileResponse::new)
                 .toList();
