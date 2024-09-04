@@ -20,21 +20,20 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        session.invalidate();
+    @GetMapping("/signup")
+    public String signup() {
+        return "signup";
+    }
+
+    @PostMapping("/signup")
+    public String signup(UserSignupRequest dto) {
+        userService.signup(dto);
         return "redirect:/";
     }
 
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-    @GetMapping("/signup")
-    public String signup() {
-        return "signup";
     }
 
     @PostMapping("/login")
@@ -45,15 +44,16 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("/signup")
-    public String signup(UserSignupRequest dto) {
-        userService.signup(dto);
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        session.invalidate();
         return "redirect:/";
     }
 
     @GetMapping("/user")
-    public String modify() {
-        return "modify";
+    public String view() {
+        return "view_user";
     }
 
     @PostMapping("/user/modify")

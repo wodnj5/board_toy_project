@@ -40,4 +40,10 @@ public class UserEntity extends BaseTimeEntity {
     public boolean checkPassword(String password) {
         return this.password.equals(password);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof UserEntity) return this.id.equals(((UserEntity) obj).getId());
+        return false;
+    }
 }

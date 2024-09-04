@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: header">
+    <title>Title</title>
+</head>
+
+<body>
+<nav th:replace="fragments/menu :: menu"></nav>
+<div class="container vh-100 d-flex justify-content-center align-items-start mt-5">
+    <div class="bg-light p-4 rounded border" style="width: 800px;">
+        <form enctype="multipart/form-data" method="post" th:action="@{'/post/' + ${post.id} + '/modify'}">
+            <div class="mb-3">
+                <label class="form-label" for="exampleFormControlInput1">제목</label>
+                <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="제목"
+                       th:disabled="${session.user == null or session.user.id ne post.userId}"
+                       th:value="${post.title}"
+                       type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="exampleFormControlTextarea1">내용</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="contents" placeholder="내용"
+                          rows="3"
+                          th:disabled="${session.user eq null or session.user.id ne post.userId}"
+                          th:text="${post.contents}"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="formFileMultiple">업로드 된 파일</label>
+                <div class="form-check" th:each="postFile: ${post.postFiles}">
+                    <input class="form-check-input" id="flexSwitchCheckDefault" name="uploadedFileIds"
+                           role="switch"
+                           th:disabled="${session.user eq null or session.user ne post.userId}"
+                           th:value="${postFile.id}"
+                           type="checkbox">
+                    <label class="form-check-label" for="flexSwitchCheckDefault"><a
+                            th:href="@{${postFile.path}}"
+                            th:text="${postFile.originalFilename}"></a></label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="formFileMultiple">파일 업로드</label>
+                <input class="form-control" id="formFileMultiple" multiple name="multipartFiles"
+                       th:disabled="${session.user eq null or session.user.id ne post.userId}" type="file">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary"
+                        th:unless="${session.user eq null or session.user.id ne post.userId}"
+                        type="submit">수정
+                </button>
+                <a class="btn btn-danger" th:href="@{'/post/' + ${post.id} + '/delete'}"
+                   th:unless="${session.user eq null or session.user.id ne post.userId}">삭제</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:replace="fragments/footer :: footer"></script>
+</body>
+
+</html>

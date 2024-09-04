@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: header">
+    <title>Title</title>
+</head>
+
+<body>
+<nav th:replace="fragments/menu :: menu"></nav>
+<div class="container vh-100 d-flex justify-content-center align-items-start mt-5">
+    <div class="bg-light p-4 rounded border" style="width: 800px;">
+        <form enctype="multipart/form-data" method="post" th:action="@{'/post'}">
+            <div class="mb-3">
+                <label class="form-label" for="exampleFormControlInput1">제목</label>
+                <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="제목" type="text">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="exampleFormControlTextarea1">내용</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="contents" placeholder="내용"
+                          rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="formFileMultiple">파일 업로드</label>
+                <input class="form-control" id="formFileMultiple" multiple name="multipartFiles" type="file">
+            </div>
+            <button class="btn btn-primary" type="submit">글 작성</button>
+        </form>
+    </div>
+</div>
+<script th:replace="fragments/footer :: footer"></script>
+</body>
+
+</html>

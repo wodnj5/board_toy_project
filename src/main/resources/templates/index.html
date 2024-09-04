@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<html>
+
+<head th:replace="fragments/header :: header">
+    <title>Title</title>
+</head>
+
+<body>
+<nav th:replace="fragments/menu :: menu"></nav>
+<div class="container vh-100 d-flex justify-content-center align-items-start mt-5">
+    <div class="bg-light p-4 rounded border" style="width: 1000px;">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">제목</th>
+                <th scope="col">닉네임</th>
+                <th scope="col">업로드 날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${result}">
+                <th scope="row" th:text="${post.id}"></th>
+                <td><a th:href="@{'/post/' + ${post.id}}" th:text="${post.title}"></a></td>
+                <td th:text="${post.nickname}"></td>
+                <td th:text="${post.createdDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination d-flex justify-content-center">
+                <li class="page-item" th:if="${startPage > 0}">
+                    <a aria-label="Previous" class="page-link" th:href="@{/(page=${startPage - 5}, search=${param.search})}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage - 1)}" th:if="${endPage > 0}">
+                    <a class="page-link" th:href="@{/(page=${i}, search=${param.search})}" th:text="${i + 1}"></a>
+                </li>
+                <li class="page-item" th:if="${endPage < result.totalPages}">
+                    <a aria-label="Next" class="page-link" th:href="@{/(page=${endPage}, search=${param.search})}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<script th:replace="fragments/footer :: footer"></script>
+</body>
+
+</html>

@@ -31,7 +31,7 @@ public class PostService {
     private final AmazonS3Bucket amazonS3Bucket;
 
     @Transactional
-    public void create(UserEntity userEntity, PostCreateRequest dto) {
+    public void post(UserEntity userEntity, PostCreateRequest dto) {
         PostEntity post = new PostEntity(userEntity, dto.getTitle(), dto.getContents());
         uploadFiles(post, dto.getMultipartFiles());
         postRepository.save(post);
@@ -41,7 +41,7 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
-    public PostEntity findOne(Long id) {
+    public PostEntity view(Long id) {
         return postRepository.findById(id).orElseThrow(PostNotFoundException::new);
     }
 
@@ -73,11 +73,13 @@ public class PostService {
     }
 
     @Transactional
-    public void remove(Long postId) {
+    public void delete(UserEntity user, Long postId) {
         PostEntity post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        List<PostFileEntity> postFileEntities = post.getPostFiles();
-        postFileEntities.forEach(amazonS3Bucket::deleteObject);
-        postRepository.delete(post);
+        if(user.equals(post.getUser())) {
+            List<PostFileEntity> postFileEntities = post.getPostFiles();
+            postFileEntities.forEach(amazonS3Bucket::deleteObject);
+            postRepository.delete(post);
+        }
     }
 
     public Page<PostEntity> search(PostSearchRequest dto, Pageable pageable) {

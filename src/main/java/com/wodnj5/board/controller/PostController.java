@@ -9,7 +9,9 @@ import com.wodnj5.board.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,28 +25,33 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String home(Pageable pageable, Model model) {
-        model.addAttribute("posts", postService.findAll(pageable).map(PostResponse::new));
-        return "home";
+    public String search(PostSearchRequest dto, @PageableDefault Pageable pageable, Model model) {
+        Page<PostResponse> result = postService.search(dto, pageable).map(PostResponse::new);
+        int start = Math.max(0, (result.getNumber() / 5 * 5));
+        int end = Math.min(start + 5, result.getTotalPages());
+        model.addAttribute("startPage", start);
+        model.addAttribute("endPage", end);
+        model.addAttribute("result", result);
+        return "index";
     }
 
     @GetMapping("/post")
-    public String create() {
-        return "create";
+    public String post() {
+        return "post";
     }
 
     @PostMapping("/post")
-    public String create(HttpServletRequest request, PostCreateRequest dto) {
+    public String post(HttpServletRequest request, PostCreateRequest dto) {
         HttpSession session = request.getSession(false);
         UserEntity user = (UserEntity) session.getAttribute("user");
-        postService.create(user, dto);
+        postService.post(user, dto);
         return "redirect:/";
     }
 
     @GetMapping("/post/{id}")
     public String read(@PathVariable Long id, Model model) {
-        model.addAttribute("post", new PostResponse(postService.findOne(id)));
-        return "read";
+        model.addAttribute("post", new PostResponse(postService.view(id)));
+        return "view_post";
     }
 
     @PostMapping("/post/{id}/modify")
@@ -53,15 +60,12 @@ public class PostController {
         return "redirect:/post/" + id;
     }
 
-    @PostMapping("/post/{id}/remove")
-    public String remove(@PathVariable Long id) {
-        postService.remove(id);
+    @GetMapping("/post/{id}/delete")
+    public String delete(HttpServletRequest request, @PathVariable Long id) {
+        HttpSession session = request.getSession(false);
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        postService.delete(user, id);
         return "redirect:/";
     }
 
-    @GetMapping("/post/search")
-    public String search(PostSearchRequest dto, Pageable pageable, Model model) {
-        model.addAttribute("posts", postService.search(dto, pageable).map(PostResponse::new));
-        return "home";
-    }
 }
