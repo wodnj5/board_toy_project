@@ -5,7 +5,6 @@ import com.wodnj5.board.domain.UserEntity;
 import com.wodnj5.board.dto.request.user.UserLoginRequest;
 import com.wodnj5.board.dto.request.user.UserModifyRequest;
 import com.wodnj5.board.dto.request.user.UserSignupRequest;
-import com.wodnj5.board.exception.UserNotFoundException;
 import com.wodnj5.board.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class UserService {
 
     public UserEntity login(UserLoginRequest dto) {
         UserEntity user = userRepository.findByUsername(dto.getUsername())
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(IllegalStateException::new);
 
         if(!user.checkPassword(dto.getPassword())) {
             throw new IllegalStateException();

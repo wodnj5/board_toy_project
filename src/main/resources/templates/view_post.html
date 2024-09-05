@@ -47,8 +47,15 @@
                         th:unless="${session.user eq null or session.user.id ne post.userId}"
                         type="submit">수정
                 </button>
-                <a class="btn btn-danger" th:href="@{'/post/' + ${post.id} + '/delete'}"
-                   th:unless="${session.user eq null or session.user.id ne post.userId}">삭제</a>
+            </div>
+        </form>
+        <form method="post" th:action="@{'/post/' + ${post.id} + '/delete'}"
+              th:unless="${session.user eq null or session.user.id ne post.userId}">
+            <div class="mb-3">
+                <button class="btn btn-danger"
+                        th:unless="${session.user eq null or session.user.id ne post.userId}"
+                        type="submit">삭제
+                </button>
             </div>
         </form>
     </div>

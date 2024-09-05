@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -37,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(HttpServletRequest request, Model model, UserLoginRequest dto) {
+    public String login(HttpServletRequest request, UserLoginRequest dto) {
         UserEntity user = userService.login(dto);
         HttpSession session = request.getSession();
         session.setAttribute("user", user);

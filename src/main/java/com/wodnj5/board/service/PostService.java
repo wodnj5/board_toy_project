@@ -7,7 +7,6 @@ import com.wodnj5.board.domain.UserEntity;
 import com.wodnj5.board.dto.request.post.PostCreateRequest;
 import com.wodnj5.board.dto.request.post.PostModifyRequest;
 import com.wodnj5.board.dto.request.post.PostSearchRequest;
-import com.wodnj5.board.exception.PostNotFoundException;
 import com.wodnj5.board.repository.AmazonS3Bucket;
 import com.wodnj5.board.repository.post.PostRepository;
 import java.io.File;
@@ -37,13 +36,9 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public Page<PostEntity> findAll(Pageable pageable) {
-        return postRepository.findAll(pageable);
-    }
-
     @Transactional
     public PostEntity view(Long id) {
-        PostEntity post =  postRepository.findById(id).orElseThrow(PostNotFoundException::new);
+        PostEntity post =  postRepository.findById(id).orElseThrow(IllegalStateException::new);
         post.increaseViews();
         return post;
     }
@@ -63,7 +58,7 @@ public class PostService {
 
     @Transactional
     public void modify(Long id, PostModifyRequest dto) {
-        PostEntity post = postRepository.findById(id).orElseThrow(PostNotFoundException::new);
+        PostEntity post = postRepository.findById(id).orElseThrow(IllegalStateException::new);
         // 삭제해야하는 ID가 있다면 S3와 DB에서 파일 삭제
         List<Long> uploadedFileIds = dto.getUploadedFileIds();
         if(Optional.ofNullable(uploadedFileIds).isPresent()) {
@@ -76,13 +71,11 @@ public class PostService {
     }
 
     @Transactional
-    public void delete(UserEntity user, Long postId) {
-        PostEntity post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        if(user.equals(post.getUser())) {
-            List<PostFileEntity> postFileEntities = post.getPostFiles();
-            postFileEntities.forEach(amazonS3Bucket::deleteObject);
-            postRepository.delete(post);
-        }
+    public void delete(Long id) {
+        PostEntity post = postRepository.findById(id).orElseThrow(IllegalStateException::new);
+        List<PostFileEntity> postFileEntities = post.getPostFiles();
+        postFileEntities.forEach(amazonS3Bucket::deleteObject);
+        postRepository.delete(post);
     }
 
     public Page<PostEntity> search(PostSearchRequest dto, Pageable pageable) {

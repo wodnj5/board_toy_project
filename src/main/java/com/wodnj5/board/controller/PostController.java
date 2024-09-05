@@ -66,15 +66,9 @@ public class PostController {
         return "redirect:/post/" + id;
     }
 
-    @GetMapping("/post/{id}/delete")
-    public String delete(HttpServletRequest request, @PathVariable Long id) {
-        try {
-            HttpSession session = request.getSession(false);
-            UserEntity user = (UserEntity) session.getAttribute("user");
-            postService.delete(user, id);
-        } catch (NullPointerException e) {
-            return "redirect:/login";
-        }
+    @PostMapping("/post/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        postService.delete(id);
         return "redirect:/";
     }
 
