@@ -1,7 +1,6 @@
 package com.wodnj5.board.domain;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +28,6 @@ public class PostEntity extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
     private String title;
-    @Column(columnDefinition = "text")
     private String contents;
     private Long views;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

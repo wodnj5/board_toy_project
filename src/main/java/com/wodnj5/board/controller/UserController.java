@@ -4,14 +4,16 @@ import com.wodnj5.board.domain.UserEntity;
 import com.wodnj5.board.dto.request.user.UserLoginRequest;
 import com.wodnj5.board.dto.request.user.UserModifyRequest;
 import com.wodnj5.board.dto.request.user.UserSignupRequest;
+import com.wodnj5.board.dto.response.user.LoginUserResponse;
+import com.wodnj5.board.dto.response.user.UserInfoResponse;
 import com.wodnj5.board.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,30 +38,28 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(HttpServletRequest request, UserLoginRequest dto) {
-        UserEntity user = userService.login(dto);
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
+    public String login(HttpSession session, UserLoginRequest dto) {
+        UserEntity loginUser = userService.login(dto);
+        session.setAttribute("loginUser", new LoginUserResponse(loginUser));
         return "redirect:/";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+    public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
 
     @GetMapping("/user")
-    public String view() {
+    public String viewUserInfo(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse login, Model model) {
+        UserEntity userInfo = userService.getLoginUserInfo(login.getId());
+        model.addAttribute("userInfo", new UserInfoResponse(userInfo));
         return "view_user";
     }
 
     @PostMapping("/user/modify")
-    public String modify(HttpServletRequest request, UserModifyRequest dto) {
-        HttpSession session = request.getSession(false);
-        Optional<UserEntity> user = Optional.ofNullable((UserEntity) session.getAttribute("user"));
-        user.ifPresent(u -> userService.modify(u.getId(), dto));
+    public String modify(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse login, UserModifyRequest dto) {
+        userService.modify(login.getId(), dto);
         return "redirect:/user";
     }
 }

@@ -5,9 +5,9 @@ import com.wodnj5.board.dto.request.post.PostCreateRequest;
 import com.wodnj5.board.dto.request.post.PostModifyRequest;
 import com.wodnj5.board.dto.request.post.PostSearchRequest;
 import com.wodnj5.board.dto.response.post.PostResponse;
+import com.wodnj5.board.dto.response.user.LoginUserResponse;
 import com.wodnj5.board.service.PostService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.wodnj5.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +17,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequiredArgsConstructor
 public class PostController {
 
+    private final UserService userService;
     private final PostService postService;
 
     @GetMapping("/")
@@ -36,26 +38,19 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public String post(HttpServletRequest request) {
-        try {
-            HttpSession session = request.getSession(false);
-            session.getAttribute("user");
-        } catch (NullPointerException e) {
-            return "redirect:/login";
-        }
+    public String post() {
         return "post";
     }
 
     @PostMapping("/post")
-    public String post(HttpServletRequest request, PostCreateRequest dto) {
-        HttpSession session = request.getSession(false);
-        UserEntity user = (UserEntity) session.getAttribute("user");
+    public String post(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse login, PostCreateRequest dto) {
+        UserEntity user = userService.getLoginUserInfo(login.getId());
         postService.post(user, dto);
         return "redirect:/";
     }
 
     @GetMapping("/post/{id}")
-    public String view(@PathVariable Long id, Model model) {
+    public String viewPost(@PathVariable Long id, Model model) {
         model.addAttribute("post", new PostResponse(postService.view(id)));
         return "view_post";
     }

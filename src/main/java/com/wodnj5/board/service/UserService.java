@@ -27,6 +27,10 @@ public class UserService {
         return user;
     }
 
+    public UserEntity getLoginUserInfo(Long id) {
+        return userRepository.findById(id).orElseThrow(IllegalStateException::new);
+    }
+
     @Transactional
     public void signup(UserSignupRequest dto) {
         UserEntity userEntity = new UserEntity(dto.getUsername(), dto.getPassword(), dto.getNickname(), Role.ROLE_USER);

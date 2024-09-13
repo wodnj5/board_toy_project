@@ -13,7 +13,7 @@
             <div class="mb-3">
                 <label class="form-label" for="exampleFormControlInput1">제목</label>
                 <input class="form-control" id="exampleFormControlInput1" name="title" placeholder="제목"
-                       th:disabled="${session.user == null or session.user.id ne post.userId}"
+                       th:disabled="${session.loginUser == null or session.loginUser.id ne post.userId}"
                        th:value="${post.title}"
                        type="text">
             </div>
@@ -21,7 +21,7 @@
                 <label class="form-label" for="exampleFormControlTextarea1">내용</label>
                 <textarea class="form-control" id="exampleFormControlTextarea1" name="contents" placeholder="내용"
                           rows="3"
-                          th:disabled="${session.user eq null or session.user.id ne post.userId}"
+                          th:disabled="${session.loginUser eq null or session.loginUser.id ne post.userId}"
                           th:text="${post.contents}"></textarea>
             </div>
             <div class="mb-3">
@@ -29,7 +29,7 @@
                 <div class="form-check" th:each="postFile: ${post.postFiles}">
                     <input class="form-check-input" id="flexSwitchCheckDefault" name="uploadedFileIds"
                            role="switch"
-                           th:disabled="${session.user eq null or session.user.id ne post.userId}"
+                           th:disabled="${session.loginUser eq null or session.loginUser.id ne post.userId}"
                            th:value="${postFile.id}"
                            type="checkbox">
                     <label class="form-check-label" for="flexSwitchCheckDefault"><a
@@ -40,20 +40,20 @@
             <div class="mb-3">
                 <label class="form-label" for="formFileMultiple">파일 업로드</label>
                 <input class="form-control" id="formFileMultiple" multiple name="multipartFiles"
-                       th:disabled="${session.user eq null or session.user.id ne post.userId}" type="file">
+                       th:disabled="${session.loginUser eq null or session.loginUser.id ne post.userId}" type="file">
             </div>
             <div class="mb-3">
                 <button class="btn btn-primary"
-                        th:unless="${session.user eq null or session.user.id ne post.userId}"
+                        th:unless="${session.loginUser eq null or session.loginUser.id ne post.userId}"
                         type="submit">수정
                 </button>
             </div>
         </form>
         <form method="post" th:action="@{'/post/' + ${post.id} + '/delete'}"
-              th:unless="${session.user eq null or session.user.id ne post.userId}">
+              th:unless="${session.loginUser eq null or session.loginUser.id ne post.userId}">
             <div class="mb-3">
                 <button class="btn btn-danger"
-                        th:unless="${session.user eq null or session.user.id ne post.userId}"
+                        th:unless="${session.loginUser eq null or session.loginUser.id ne post.userId}"
                         type="submit">삭제
                 </button>
             </div>
