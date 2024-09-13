@@ -51,15 +51,17 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String viewUserInfo(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse login, Model model) {
-        UserEntity userInfo = userService.getLoginUserInfo(login.getId());
+    public String viewUserInfo(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse loginUser, Model model) {
+        if(loginUser == null) return "redirect:/login";
+        UserEntity userInfo = userService.getLoginUserInfo(loginUser.getId());
         model.addAttribute("userInfo", new UserInfoResponse(userInfo));
         return "view_user";
     }
 
     @PostMapping("/user/modify")
-    public String modify(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse login, UserModifyRequest dto) {
-        userService.modify(login.getId(), dto);
+    public String modify(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse loginUser, UserModifyRequest dto) {
+        if(loginUser == null) return "redirect:/login";
+        userService.modify(loginUser.getId(), dto);
         return "redirect:/user";
     }
 }

@@ -43,8 +43,9 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public String post(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse login, PostCreateRequest dto) {
-        UserEntity user = userService.getLoginUserInfo(login.getId());
+    public String post(@SessionAttribute(name = "loginUser", required = false) LoginUserResponse loginUser, PostCreateRequest dto) {
+        if(loginUser == null) return "redirect:/login";
+        UserEntity user = userService.getLoginUserInfo(loginUser.getId());
         postService.post(user, dto);
         return "redirect:/";
     }
